@@ -1,0 +1,26 @@
+type Query {
+  chat: [Chat!]!
+}
+type Chat{
+    id: ID!
+    lastUpdated: String!
+    users: [User]!
+    messages: [Message]!
+}
+type Message{
+    id: ID!
+    sender: User!
+    text: String!
+}
+type User{
+    id: ID!
+    displayName: String!
+    email: String!
+    password: String!
+    profilePictureUrl: String
+    status: Status!
+}
+type Status{
+    id: ID!
+    statusName: String!
+}

@@ -15,11 +15,18 @@ model chat {
 }
 
 model message {
-    id       Int   @id @default(autoincrement())
-    sender   user  @relation(fields: [senderId], references: [id])
+    id       Int    @id @default(autoincrement())
+    sender   user   @relation(fields: [senderId], references: [id])
     senderId Int
-    chat     chat? @relation(fields: [chatId], references: [id])
+    text     String
+    chat     chat?  @relation(fields: [chatId], references: [id])
     chatId   Int?
+}
+
+model status {
+    id         Int    @id @default(autoincrement())
+    statusName String
+    user       user[]
 }
 
 model user {
@@ -28,9 +35,11 @@ model user {
     email             String @unique
     password          String
     profilePictureUrl String
-    status            String
+    status            status @relation(fields: [statusId], references: [id])
 
-    chat    chat?     @relation(fields: [chatId], references: [id])
-    chatId  Int?
-    message message[]
+
+    chat     chat?     @relation(fields: [chatId], references: [id])
+    chatId   Int?
+    message  message[]
+    statusId Int
 }
