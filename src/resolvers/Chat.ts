@@ -1,12 +1,17 @@
 import { Context } from "graphql-yoga/dist/types"
 import { GraphQLResolveInfo} from "graphql/type"
 
-function users(parent: any,args: any,context: Context,info: GraphQLResolveInfo){
-    return context.db.chats.findOne({where: {id: parent.id}}).users()
+ const Chat ={
+    users: (parent: any,args: any,context: Context,info: GraphQLResolveInfo) => {
+        return context.db.chats.findOne({where: {id: parent.id}}).users()
+    },
+    
+    messages: (parent: any,args: any,context: Context,info: GraphQLResolveInfo) =>{
+        return context.db.chats.findOne({where: {id: parent.id}}).messages()
+    }
 }
+export default Chat;
 
-function messages(parent: any,args: any,context: Context,info: GraphQLResolveInfo){
-    return context.db.chats.findOne({where: {id: parent.id}}).messages()
-}
 
-module.exports={users,messages}
+
+

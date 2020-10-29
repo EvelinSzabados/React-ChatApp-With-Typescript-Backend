@@ -1,14 +1,14 @@
 import { GraphQLServer } from 'graphql-yoga'
 import { PrismaClient } from '@prisma/client'
-const Query = require('./resolvers/Query')
-const Chat = require('./resolvers/Chat')
-const Message = require('./resolvers/Message')
-const User = require('./resolvers/User')
+import Chat from './resolvers/Chat'
+import Message from './resolvers/Message'
+import User from './resolvers/User'
+import Query from './resolvers/Query'
 
 const prisma = new PrismaClient()
 
 const resolvers = {
-    Query,Chat, Message, User
+    Query, Chat, Message, User
 }
 
 const server = new GraphQLServer({
