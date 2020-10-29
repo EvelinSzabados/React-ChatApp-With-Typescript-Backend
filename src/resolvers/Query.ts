@@ -1,30 +1,40 @@
-function chats(parent, args, context, info) {
+import { Context } from "graphql-yoga/dist/types"
+import { GraphQLResolveInfo } from "graphql/type"
 
-    return context.db.chat.findMany()
-}
-function chat(parent, args, context, info) {
-    const argsId = parseInt(args.id)
-    return context.db.chat.findOne({ where: { id: argsId } })
-}
+// interface QueryProps {
+//     parent: any,
+//     args: any,
+//     context: Context,
+//     info: GraphQLResolveInfo
+// }
 
-function messages(parent, args, context, info) {
-    return context.db.message.findMany()
-}
+    export function chats(parent: any,args: any,context: Context,info: GraphQLResolveInfo) {
+        
+        return context.db.chats.findMany()
+    }
+    export function chat(parent: any,args: any,context: Context,info: GraphQLResolveInfo) {
+        const argsId = parseInt(args.id)
+        return context.db.chats.findOne({ where: { id: argsId } })
+    }
+    
+    export function messages(parent: any,args: any,context: Context,info: GraphQLResolveInfo) {
+        return context.db.messages.findMany()
+    }
+    
+    export function message(parent: any,args: any,context: Context,info: GraphQLResolveInfo) {
+        const argsId = parseInt(args.id)
+        return context.db.messages.findOne({ where: { id: argsId } })
+    }
+    
+    export function users(parent: any,args: any,context: Context,info: GraphQLResolveInfo) {
+        return context.db.users.findMany()
+    }
+    
+    export function user(parent: any,args: any,context: Context,info: GraphQLResolveInfo) {
+        const argsId = parseInt(args.id)
+        return context.db.users.findOne({ where: { id: argsId } })
+    }
 
-function message(parent, args, context, info) {
-    const argsId = parseInt(args.id)
-    return context.db.message.findOne({ where: { id: argsId } })
-}
 
-function users(parent, args, context, info) {
-    return context.db.user.findMany()
-}
 
-function user(parent, args, context, info) {
-    const argsId = parseInt(args.id)
-    return context.db.user.findOne({ where: { id: argsId } })
-}
 
-module.exports = {
-    chats, chat, messages, message, users, user
-}

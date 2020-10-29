@@ -20,6 +20,7 @@
   "homepage": "https://github.com/EvelinSzabados/React-ChatApp-With-Typescript-Backend#readme",
   "dependencies": {
     "@prisma/client": "^2.10.0",
+    "@types/node": "^14.14.6",
     "apollo-server": "^2.18.2",
     "graphql": "^15.4.0",
     "graphql-yoga": "^1.18.3"
