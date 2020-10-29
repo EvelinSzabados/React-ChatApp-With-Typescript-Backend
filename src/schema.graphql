@@ -14,6 +14,7 @@ type Mutation{
             password: String!,
             profilePictureUrl: String,
             status: ID!): User!
+    deleteChat(id: ID!): String
     
 }
 
