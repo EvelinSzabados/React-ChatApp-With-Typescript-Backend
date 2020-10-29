@@ -1,6 +1,7 @@
 import { Context } from "graphql-yoga/dist/types"
 import { GraphQLResolveInfo } from "graphql/type"
 
+
 export function newChat(parent: any,{users,messages}: any,context: Context,info: GraphQLResolveInfo){
     const newChat = context.db.chats.create({
         data: {
@@ -15,8 +16,10 @@ export function newChat(parent: any,{users,messages}: any,context: Context,info:
       return newChat;
 }
 
-export function deleteChat(parent: any,{id}: any,context: Context,info: GraphQLResolveInfo){
-    context.db.chats.delete({
+export async function deleteChat(parent: any,{id}: any,context: Context,info: GraphQLResolveInfo){
+  
+    await context.db.messages.deleteMany({where: {chatId: parseInt(id)}})
+    await context.db.chats.delete({
       where: { id: parseInt(id) },
     })
 

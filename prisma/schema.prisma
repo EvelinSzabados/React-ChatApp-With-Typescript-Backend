@@ -11,7 +11,7 @@ model chats {
     id          Int        @id @default(autoincrement())
     lastUpdated DateTime   @default(now())
     users       users[]    @relation(name : "ChatUsers")
-    messages    messages[]
+    messages    messages[] 
 }
 
 model messages {
