@@ -16,6 +16,15 @@ function message(parent, args, context, info) {
     return context.db.message.findOne({ where: { id: argsId } })
 }
 
+function users(parent, args, context, info) {
+    return context.db.user.findMany()
+}
+
+function user(parent, args, context, info) {
+    const argsId = parseInt(args.id)
+    return context.db.user.findOne({ where: { id: argsId } })
+}
+
 module.exports = {
-    chats, chat, messages, message
+    chats, chat, messages, message, users, user
 }

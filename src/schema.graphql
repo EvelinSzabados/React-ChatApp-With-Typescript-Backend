@@ -3,6 +3,8 @@ type Query {
   chat(id: ID!): Chat 
   messages: [Message]
   message(id: ID!): Message
+  users: [User!]!
+  user(id: ID!): User
 }
 
 type Chat{
