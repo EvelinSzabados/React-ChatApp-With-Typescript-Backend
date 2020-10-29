@@ -1,11 +1,15 @@
 type Query {
-  chat: [Chat!]!
+  chats: [Chat!]!
+  chat(id: ID!): Chat 
+  messages: [Message]
+  message(id: ID!): Message
 }
+
 type Chat{
     id: ID!
     lastUpdated: String!
-    users: [User]!
-    messages: [Message]!
+    users: [User!]!
+    messages: [Message!]!
 }
 type Message{
     id: ID!
@@ -24,3 +28,5 @@ type Status{
     id: ID!
     statusName: String!
 }
+
+
