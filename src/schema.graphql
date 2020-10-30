@@ -7,6 +7,18 @@ type Query {
   user(id: ID!): User
 }
 
+type Mutation{
+    newChat(users: [ID!]!, messages: [ID]!): Chat
+    newUser(displayName: String!,
+            email: String!,
+            password: String!,
+            profilePictureUrl: String,
+            status: ID!): User!
+    deleteChat(id: ID!): String
+    newMessage(senderId: ID!, chatId: ID!, text: String!): Message
+    
+}
+
 type Chat{
     id: ID!
     lastUpdated: String!

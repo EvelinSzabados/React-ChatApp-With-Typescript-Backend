@@ -1,14 +1,15 @@
 import { GraphQLServer } from 'graphql-yoga'
 import { PrismaClient } from '@prisma/client'
-import Chat from './resolvers/Chat'
-import Message from './resolvers/Message'
-import User from './resolvers/User'
-import Query from './resolvers/Query'
+import Chat from './resolvers/Queries/Chat'
+import Message from './resolvers/Queries/Message'
+import User from './resolvers/Queries/User'
+import Query from './resolvers/Queries/Query'
+import Mutation from './resolvers/Mutations/Mutation'
 
 const prisma = new PrismaClient()
 
 const resolvers = {
-    Query, Chat, Message, User
+    Query, Chat, Message, User, Mutation
 }
 
 const server = new GraphQLServer({
