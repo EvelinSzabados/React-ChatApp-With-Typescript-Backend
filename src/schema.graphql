@@ -16,6 +16,8 @@ type Mutation{
             status: ID!): User!
     deleteChat(id: ID!): String
     newMessage(senderId: ID!, chatId: ID!, text: String!): Message
+    signup(email: String!, password: String!, displayName: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
     
 }
 
@@ -38,6 +40,12 @@ type User{
     profilePictureUrl: String
     status: Status!
 }
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
 type Status{
     id: ID!
     statusName: String!
