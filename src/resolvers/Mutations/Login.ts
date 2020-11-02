@@ -14,6 +14,14 @@ const login: GraphQLResolveFn = async (parent, args, context, info) => {
     }
 
     const token = jwt.sign({ userId: user.id }, APP_SECRET)
+    const options = {
+        maxAge: 1000 * 60 * 60 * 24, //expires in a day
+        httpOnly: true,
+        domain: "localhost",
+
+
+    }
+    context.response.cookie('Bearer', token, options)
 
     return {
         token,

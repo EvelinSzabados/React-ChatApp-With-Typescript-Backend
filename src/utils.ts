@@ -4,9 +4,11 @@ import { verify } from 'jsonwebtoken'
 export const APP_SECRET = 'k-i-n-s-t-a'
 
 export function getUserId(req: any) {
-    const Authorization = req.get('Authorization')
+    const Authorization = req.get('Cookie')
+
     if (Authorization) {
-        const token = Authorization.replace('Bearer ', '')
+        const token = Authorization.replace('Bearer=', '')
+
         const userId = verify(token, APP_SECRET)
         return userId
     }

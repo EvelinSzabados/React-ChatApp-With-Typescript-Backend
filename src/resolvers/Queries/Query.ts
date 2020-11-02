@@ -1,8 +1,10 @@
 import { GraphQLFieldResolveFn } from '../types'
-// import { getUserId } from '../../utils'
+import { getUserId } from '../../utils'
 
 const Query: GraphQLFieldResolveFn = {
+
     chats: (parent, args, context, info) => {
+        getUserId(context.request)
         return context.db.chats.findMany()
     },
     chat: (parent, args, context, info) => {
