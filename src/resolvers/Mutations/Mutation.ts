@@ -1,7 +1,8 @@
 import { newChat, deleteChat } from './ChatActions'
-import { newMessage } from './MessageActions'
+import newMessage from './MessageActions'
+import { GraphQLFieldResolveFn } from '../types'
 
-const Mutation = {
+const Mutation: GraphQLFieldResolveFn = {
     newChat: newChat,
     deleteChat: deleteChat,
     newMessage: newMessage

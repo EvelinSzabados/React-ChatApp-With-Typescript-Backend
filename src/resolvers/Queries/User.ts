@@ -1,10 +1,9 @@
-import { Context } from "graphql-yoga/dist/types"
-import { GraphQLResolveInfo} from "graphql/type"
+import { GraphQLFieldResolveFn } from '../types'
 
- const User ={
-    status: (parent: any,args: any,context: Context,info: GraphQLResolveInfo) =>{
-        return context.db.users.findOne({where: {id: parent.id}}).status()
+const User: GraphQLFieldResolveFn = {
+    status: (parent, args, context, info) => {
+        return context.db.users.findOne({ where: { id: parent.id } }).status()
     }
-     
+
 }
 export default User;

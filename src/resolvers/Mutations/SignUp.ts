@@ -1,10 +1,11 @@
 import { Context } from "graphql-yoga/dist/types"
 import { GraphQLResolveInfo } from "graphql/type"
+import { GraphQLResolveFn } from '../types'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { APP_SECRET } from './utils'
+import { APP_SECRET } from '../../utils'
 
-export default async function signup(parent: any, args: any, context: Context, info: GraphQLResolveInfo) {
+const signup: GraphQLResolveFn = async (parent, args, context, info) => {
     const password = await bcrypt.hash(args.password, 10)
 
     const user = await context.db.users.create({ data: { ...args, password } })
@@ -15,3 +16,5 @@ export default async function signup(parent: any, args: any, context: Context, i
         user,
     }
 }
+
+export default signup;

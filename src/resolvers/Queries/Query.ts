@@ -1,21 +1,19 @@
-import { Context } from "graphql-yoga/dist/types"
-import { GraphQLResolveInfo } from "graphql/type"
+import { GraphQLFieldResolveFn } from '../types'
 
-const Query = {
-    chats: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
-
+const Query: GraphQLFieldResolveFn = {
+    chats: (parent, args, context, info) => {
         return context.db.chats.findMany()
     },
-    chat: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    chat: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
         return context.db.chats.findOne({ where: { id: argsId } })
     },
 
-    users: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    users: (parent, args, context, info) => {
         return context.db.users.findMany()
     },
 
-    user: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    user: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
         return context.db.users.findOne({ where: { id: argsId } })
     }

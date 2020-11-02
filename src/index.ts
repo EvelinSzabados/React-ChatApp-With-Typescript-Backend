@@ -8,6 +8,7 @@ import Mutation from './resolvers/Mutations/Mutation'
 import { getUserId } from './utils'
 import { rule, shield } from 'graphql-shield'
 import { Context } from 'graphql-yoga/dist/types'
+import { GraphQLResolveInfo } from 'graphql/type'
 
 
 const prisma = new PrismaClient()
@@ -16,26 +17,27 @@ const resolvers = {
     Query, Chat, Message, User, Mutation
 }
 
-const isAuthenticated = rule({ cache: "contextual" })(
-    async (parent, args, ctx: Context, info) => {
+// const isAuthenticated = rule({ cache: "contextual" })(
+//     async (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
 
-        return ctx.userId !== null
-    })
+//         return context.userId !== null
+//     }
+// )
 
-const permissions = shield({
-    Query: {
-        chats: isAuthenticated
-    }
-});
+// const permissions = shield({
+//     Query: {
+//         chats: isAuthenticated
+//     }
+// });
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
-    middlewares: [permissions],
+    // middlewares: [permissions],
     context: async (request: any) => ({
         ...request,
         db: prisma,
-        userId: getUserId(request)
+        // userId: getUserId(request)
     })
 
 })

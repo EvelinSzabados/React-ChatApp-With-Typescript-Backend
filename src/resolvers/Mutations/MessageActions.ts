@@ -1,17 +1,17 @@
-import { Context } from "graphql-yoga/dist/types"
-import { GraphQLResolveInfo } from "graphql/type"
+import { GraphQLResolveFn } from '../types'
 
-export async function newMessage(parent: any,{senderId,chatId,text}: any,context: Context,info: GraphQLResolveInfo){
+const newMessage: GraphQLResolveFn = async (parent, args, context, info) => {
     const newMessage = await context.db.messages.create({
         data: {
             sender: {
-                connect: {id: parseInt(senderId)},
-              },
-              chat: {
-                  connect: { id: parseInt(chatId)}
-              },
-              text: text
+                connect: { id: parseInt(args.senderId) },
+            },
+            chat: {
+                connect: { id: parseInt(args.chatId) }
+            },
+            text: args.text
         }
-      })
-      return newMessage;
+    })
+    return newMessage;
 }
+export default newMessage;

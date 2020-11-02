@@ -1,11 +1,11 @@
-import { Context } from "graphql-yoga/dist/types"
-import { GraphQLResolveInfo} from "graphql/type"
+import { GraphQLFieldResolveFn } from '../types'
 
- const Message ={
-    sender: (parent: any,args: any,context: Context,info: GraphQLResolveInfo) =>{
-        return context.db.messages.findOne({where: {id: parent.id}}).sender()
+
+const Message: GraphQLFieldResolveFn = {
+    sender: (parent, args, context, info) => {
+        return context.db.messages.findOne({ where: { id: parent.id } }).sender()
     }
-    
-    
+
+
 }
 export default Message;
