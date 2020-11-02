@@ -1,4 +1,5 @@
 import { GraphQLFieldResolveFn } from '../types'
+// import { getUserId } from '../../utils'
 
 const Query: GraphQLFieldResolveFn = {
     chats: (parent, args, context, info) => {
