@@ -9,7 +9,7 @@ type Query {
 }
 
 type Mutation{
-    newChat(users: [ID!]!, messages: [ID]!): Chat
+    newChat(users: [ID!]!): Chat
     newUser(displayName: String!,
             email: String!,
             password: String!,

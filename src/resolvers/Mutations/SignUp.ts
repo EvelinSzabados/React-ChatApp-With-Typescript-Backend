@@ -12,7 +12,7 @@ const signup: GraphQLResolveFn = async (parent, args, context, info) => {
             password: password,
             displayName: args.displayName,
             status: {
-                connect: { id: 6 },
+                connect: { id: 3 },
             },
             profilePictureUrl: ''
         }
