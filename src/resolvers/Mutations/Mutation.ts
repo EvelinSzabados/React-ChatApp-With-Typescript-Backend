@@ -9,7 +9,8 @@ const Mutation: GraphQLFieldResolveFn = {
     deleteChat: deleteChat,
     newMessage: newMessage,
     signup: signup,
-    login: login
+    login: login,
+
 }
 
 export default Mutation;

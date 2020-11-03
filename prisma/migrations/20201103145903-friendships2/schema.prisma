@@ -1,6 +1,6 @@
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url = "***"
 }
 
 generator client {
@@ -32,27 +32,21 @@ model users {
     status            statuses @default(value: OFFLINE)
     chats     chats[]     @relation(name: "ChatUsers")
     message  messages[]
-    friendships friendShips[] @relation(name: "Friendship")
-    requestsSent friendShipRequestSent[]
-    requestsRecieved friendShipRequestRecieved[]  
+    friendships friendShips[]
+    friendshipRequestsSent friendShipRequest[] @relation(name: "FriendshipRequestsSentRelation")
+    friendshipRequestsReceived friendShipRequest[] @relation(name: "FriendshipRequestsReceivedRelation")
+   
 }
 
 model friendShips{
     id Int @id @default(autoincrement())
-    users users[] @relation(name: "Friendship")
+    users users[]
 }
 
-model friendShipRequestSent {
+model friendShipRequest {
         id Int @id @default(autoincrement())
-        senderId Int
-        sender users @relation(name: "FriendshipRequestsSentRelation", fields:[senderId], references: [id])
-        status friendShipRequestStatus @default(value: PENDING)
-}
-
-model friendShipRequestRecieved{
-        id Int @id @default(autoincrement())
-        recieverId Int
-        reciever users @relation(name: "FriendshipRequestsReceivedRelation", fields:[recieverId], references: [id])
+        from users @relation(name: "FriendshipRequestsSentRelation")
+        to users @relation(name: "FriendshipRequestsReceivedRelation")
         status friendShipRequestStatus @default(value: PENDING)
 }
 

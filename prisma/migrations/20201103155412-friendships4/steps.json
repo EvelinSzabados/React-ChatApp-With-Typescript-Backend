@@ -1,0 +1,79 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "users",
+      "field": "requestsSent",
+      "type": "friendShipRequest",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "requestsSent"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "requestsSent"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"FriendshipRequestsSentRelation\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "users",
+      "field": "requestsRecieved",
+      "type": "friendShipRequest",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "requestsRecieved"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "requestsRecieved"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"FriendshipRequestsReceivedRelation\""
+    },
+    {
+      "tag": "DeleteField",
+      "model": "users",
+      "field": "friendshipRequestsSent"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "users",
+      "field": "friendshipRequestsReceived"
+    }
+  ]
+}

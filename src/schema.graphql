@@ -10,16 +10,11 @@ type Query {
 
 type Mutation{
     newChat(users: [ID!]!, messages: [ID]!): Chat
-    newUser(displayName: String!,
-            email: String!,
-            password: String!,
-            profilePictureUrl: String,
-            status: ID!): User!
     deleteChat(id: ID!): String
     newMessage(senderId: ID!, chatId: ID!, text: String!): Message
     signup(email: String!, password: String!, displayName: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    
+   
 }
 
 type Chat{
@@ -40,6 +35,27 @@ type User{
     password: String!
     profilePictureUrl: String
     status: Status!
+    friends: [User!]
+    friendshipRequestsSent: [FriendshipRequestSent!]!
+    friendshipRequestsReceived: [FriendshipRequestReceived!]!
+}
+
+type FriendshipRequestSent {
+    id: ID!
+    to: User!
+    status: FriendshipRequestStatus!
+}
+
+type FriendshipRequestReceived {
+    id: ID!
+    from: User!
+    status: FriendshipRequestStatus!
+}
+
+enum FriendshipRequestStatus {
+    PENDING
+    ACCEPTED
+    REJECTED
 }
 
 type AuthPayload {

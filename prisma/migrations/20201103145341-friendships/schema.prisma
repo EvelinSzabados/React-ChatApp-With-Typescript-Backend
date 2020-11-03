@@ -1,6 +1,6 @@
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url = "***"
 }
 
 generator client {
@@ -23,36 +23,37 @@ model messages {
     chatId   Int?
 }
 
+model statuses {
+    id         Int     @id @default(autoincrement())
+    statusName String
+    user       users[]
+}
+
 model users {
     id                Int      @id @default(autoincrement())
     displayName       String
     email             String   @unique
     password          String
     profilePictureUrl String
-    status            statuses @default(value: OFFLINE)
+    status            statuses @relation(fields: [statusId], references: [id])
     chats     chats[]     @relation(name: "ChatUsers")
     message  messages[]
-    friendships friendShips[] @relation(name: "Friendship")
-    requestsSent friendShipRequestSent[]
-    requestsRecieved friendShipRequestRecieved[]  
+    statusId Int
+    friendships friendShips[]
+    friendshipRequestsSent friendShipRequest[] @relation(name: "FriendshipRequestsSentRelation")
+    friendshipRequestsReceived friendShipRequest[] @relation(name: "FriendshipRequestsReceivedRelation")
+   
 }
 
 model friendShips{
     id Int @id @default(autoincrement())
-    users users[] @relation(name: "Friendship")
+    users users[]
 }
 
-model friendShipRequestSent {
+model friendShipRequest {
         id Int @id @default(autoincrement())
-        senderId Int
-        sender users @relation(name: "FriendshipRequestsSentRelation", fields:[senderId], references: [id])
-        status friendShipRequestStatus @default(value: PENDING)
-}
-
-model friendShipRequestRecieved{
-        id Int @id @default(autoincrement())
-        recieverId Int
-        reciever users @relation(name: "FriendshipRequestsReceivedRelation", fields:[recieverId], references: [id])
+        from users @relation(name: "FriendshipRequestsSentRelation")
+        to users @relation(name: "FriendshipRequestsReceivedRelation")
         status friendShipRequestStatus @default(value: PENDING)
 }
 
@@ -60,10 +61,4 @@ enum friendShipRequestStatus {
         PENDING
         ACCEPTED
         REJECTED
-}
-
-enum statuses {
-    OFFLINE
-    BUSY
-    AVAILABLE
 }

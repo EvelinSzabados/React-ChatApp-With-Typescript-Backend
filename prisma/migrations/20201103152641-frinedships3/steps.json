@@ -1,0 +1,199 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "friendships"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "friendships"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"Friendship\""
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "friendShips",
+          "field": "users"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShips",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"Friendship\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "friendShipRequest",
+      "field": "senderId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "friendShipRequest",
+      "field": "sender",
+      "type": "users",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "sender"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "sender"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"FriendshipRequestsSentRelation\""
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "sender"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[senderId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "sender"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "friendShipRequest",
+      "field": "recieverId",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "friendShipRequest",
+      "field": "reciever",
+      "type": "users",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "reciever"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "reciever"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"FriendshipRequestsReceivedRelation\""
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "reciever"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[recieverId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendShipRequest",
+          "field": "reciever"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "friendShipRequest",
+      "field": "from"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "friendShipRequest",
+      "field": "to"
+    }
+  ]
+}
