@@ -10,7 +10,9 @@ export function getUserId(req: any) {
         const token = Authorization.replace('Bearer=', '')
 
         const userId = verify(token, APP_SECRET)
-        return userId
+
+        return userId;
+
     }
 
     throw new Error("Not authenticated")

@@ -18,7 +18,7 @@ const signup: GraphQLResolveFn = async (parent, args, context, info) => {
         }
     })
 
-    const token = jwt.sign({ userId: user.id }, APP_SECRET)
+    const token = jwt.sign({ userId: user.id }, APP_SECRET, { noTimestamp: true })
     return {
         token,
         user,

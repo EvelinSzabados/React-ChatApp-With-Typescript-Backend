@@ -13,7 +13,7 @@ const login: GraphQLResolveFn = async (parent, args, context, info) => {
         throw new Error('Invalid password')
     }
 
-    const token = jwt.sign({ userId: user.id }, APP_SECRET)
+    const token = jwt.sign({ userId: user.id }, APP_SECRET, { noTimestamp: true })
     const options = {
         maxAge: 1000 * 60 * 60 * 24, //expires in a day
         httpOnly: true,

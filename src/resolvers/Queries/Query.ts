@@ -1,11 +1,22 @@
 import { GraphQLFieldResolveFn } from '../types'
 import { getUserId } from '../../utils'
+import { UsersDistinctFieldEnum } from '@prisma/client'
 
 const Query: GraphQLFieldResolveFn = {
 
-    chats: (parent, args, context, info) => {
-        getUserId(context.request)
-        return context.db.chats.findMany()
+    chats: async (parent, args, context, info) => {
+        const userId = getUserId(context.request)
+
+        const result = await context.db.chats.findMany({
+            where: {
+                users: {
+                    some: {
+                        id: Object.values(userId)[0]
+                    }
+                }
+            }
+        })
+        return result;
     },
     chat: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
