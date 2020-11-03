@@ -1,21 +1,33 @@
-import { Context } from "graphql-yoga/dist/types"
-import { GraphQLResolveInfo } from "graphql/type"
+import { GraphQLFieldResolveFn } from '../types'
+import { getUserId } from '../../utils'
+import { UsersDistinctFieldEnum } from '@prisma/client'
 
-const Query = {
-    chats: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+const Query: GraphQLFieldResolveFn = {
 
-        return context.db.chats.findMany()
+    chats: async (parent, args, context, info) => {
+        const userId = getUserId(context.request)
+
+        const result = await context.db.chats.findMany({
+            where: {
+                users: {
+                    some: {
+                        id: Object.values(userId)[0]
+                    }
+                }
+            }
+        })
+        return result;
     },
-    chat: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    chat: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
         return context.db.chats.findOne({ where: { id: argsId } })
     },
 
-    users: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    users: (parent, args, context, info) => {
         return context.db.users.findMany()
     },
 
-    user: (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    user: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
         return context.db.users.findOne({ where: { id: argsId } })
     }

@@ -1,12 +1,15 @@
-import { Context } from "graphql-yoga/dist/types"
-import { GraphQLResolveInfo } from "graphql/type"
-import {newChat, deleteChat} from './ChatActions'
-import {newMessage} from './MessageActions'
+import { newChat, deleteChat } from './ChatActions'
+import newMessage from './MessageActions'
+import { GraphQLFieldResolveFn } from '../types'
+import signup from './SignUp'
+import login from './Login'
 
-const Mutation = {
+const Mutation: GraphQLFieldResolveFn = {
     newChat: newChat,
     deleteChat: deleteChat,
-    newMessage: newMessage
+    newMessage: newMessage,
+    signup: signup,
+    login: login
 }
 
 export default Mutation;
