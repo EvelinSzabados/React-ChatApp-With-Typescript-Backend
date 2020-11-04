@@ -23,7 +23,7 @@ model messages {
     chatId   Int?
 }
 
-enum statuses {
+model statuses {
     id         Int     @id @default(autoincrement())
     statusName String
     user       users[]
