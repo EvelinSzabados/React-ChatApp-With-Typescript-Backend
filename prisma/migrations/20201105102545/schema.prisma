@@ -1,6 +1,6 @@
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url = "***"
 }
 
 generator client {
@@ -24,14 +24,21 @@ model messages {
 }
 
 model users {
-    id                Int        @id @default(autoincrement())
+    id                Int           @id @default(autoincrement())
     displayName       String
-    email             String     @unique
+    email             String        @unique
     password          String
     profilePictureUrl String
-    status            statuses   @default(value: OFFLINE)
-    chats             chats[]    @relation(name: "ChatUsers")
+    status            statuses      @default(value: OFFLINE)
+    chats             chats[]       @relation(name: "ChatUsers")
     message           messages[]
+    friendships       friendShips[] @relation(name: "FriendshipRelation")
+
+}
+
+model friendShips {
+    id    Int     @id @default(autoincrement())
+    users users[] @relation("FriendshipRelation")
 }
 
 enum friendShipRequestStatus {

@@ -1,6 +1,6 @@
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
+    url = "***"
 }
 
 generator client {
@@ -32,6 +32,8 @@ model users {
     status            statuses   @default(value: OFFLINE)
     chats             chats[]    @relation(name: "ChatUsers")
     message           messages[]
+    followedBy        users[]    @relation("UserFollows", references: [id])
+    following         users[]    @relation("UserFollows", references: [id])
 }
 
 enum friendShipRequestStatus {
