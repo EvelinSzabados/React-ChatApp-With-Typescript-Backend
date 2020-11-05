@@ -16,6 +16,7 @@ const signup: GraphQLResolveFn = async (parent, args, context, info) => {
             friends: [],
             friendRequestsSent: [],
             friendRequestsRecieved: []
+
         }
     })
 

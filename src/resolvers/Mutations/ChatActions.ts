@@ -1,14 +1,14 @@
+import { getUserId } from '../../utils';
 import { GraphQLResolveFn } from '../types'
 
 export const newChat: GraphQLResolveFn = (parent, args, context, info) => {
+  const userId = getUserId(context.request)
   const newChat = context.db.chats.create({
     data: {
       users: {
         connect: [...args.users.map((id: string) => ({ id: parseInt(id) }))]
       },
-      messages: {
-        connect: [...args.messages.map((id: string) => ({ id: parseInt(id) }))]
-      },
+      messages: []
     }
   })
   return newChat;

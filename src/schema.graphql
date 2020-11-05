@@ -9,7 +9,8 @@ type Query {
 }
 
 type Mutation{
-    newChat(users: [ID!]!, messages: [ID]!): Chat
+
+    newChat(users: [ID!]!): Chat
     deleteChat(id: ID!): String
     newMessage(senderId: ID!, chatId: ID!, text: String!): Message
     signup(email: String!, password: String!, displayName: String!): AuthPayload

@@ -35,6 +35,7 @@ model users {
     friends                friendships[]    @relation("FriendShip")
     friendRequestsSent     friendRequests[] @relation("RequestSender")
     friendRequestsRecieved friendRequests[] @relation("RequestReciever")
+
 }
 
 model friendRequests {
