@@ -17,3 +17,49 @@ export function getUserId(req: any) {
 
     throw new Error("Not authenticated")
 }
+export const deleteRequest = async (requestId: number, context: Context) => {
+    await context.db.friendRequests.delete(
+        {
+            where: { id: requestId }
+        }
+
+    )
+}
+
+export const addFriend = async (userId: number, friendId: number, context: Context) => {
+
+    await context.db.friendships.create({
+        data: {
+            users: {
+                connect: [{ id: userId }, { id: friendId }]
+            }
+        }
+    })
+}
+
+export const removeFriend = async (userId: number, friendId: number, context: Context) => {
+
+    await context.db.friendships.deleteMany({
+        where: {
+            AND: [
+                {
+                    users: {
+                        some: {
+                            id: userId
+                        }
+                    },
+
+                }, {
+
+                    users: {
+                        some: {
+                            id: friendId
+                        }
+                    }
+
+                }]
+        }
+    })
+
+
+}

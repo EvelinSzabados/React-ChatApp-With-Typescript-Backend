@@ -1,5 +1,6 @@
 # Prisma Migrate lockfile v1
 
-20201028140012-init
-20201029095343-new-table-names
-20201029141416-many-to-many
+20201105112313-new-init3-with-requests
+20201105123754-delete-status-from-rquests
+20201105132525
+20201105133606-add-friendship-field

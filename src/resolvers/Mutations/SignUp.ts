@@ -11,10 +11,12 @@ const signup: GraphQLResolveFn = async (parent, args, context, info) => {
             email: args.email,
             password: password,
             displayName: args.displayName,
-            status: {
-                connect: { id: 3 },
-            },
-            profilePictureUrl: ''
+            status: 'OFFLINE',
+            profilePictureUrl: '',
+            friends: [],
+            friendRequestsSent: [],
+            friendRequestsRecieved: []
+
         }
     })
 

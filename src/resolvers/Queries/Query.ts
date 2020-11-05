@@ -1,6 +1,6 @@
 import { GraphQLFieldResolveFn } from '../types'
 import { getUserId } from '../../utils'
-import { UsersDistinctFieldEnum } from '@prisma/client'
+
 
 const Query: GraphQLFieldResolveFn = {
 
