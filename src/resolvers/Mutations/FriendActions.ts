@@ -1,5 +1,6 @@
 import { GraphQLResolveFn } from '../types'
-import { getUserId } from '../../utils'
+import { getUserId, deleteRequest, addFriend } from '../../utils'
+
 
 export const sendRequest: GraphQLResolveFn = async (parent, args, context, info) => {
     const userId = getUserId(context.request)
@@ -20,45 +21,17 @@ export const sendRequest: GraphQLResolveFn = async (parent, args, context, info)
 export const acceptRequest: GraphQLResolveFn = async (parent, args, context, info) => {
     const userId = getUserId(context.request)
     const requestToAccept = await context.db.friendRequests.findOne({ where: { id: parseInt(args.requestId) } })
-    console.log(requestToAccept)
-    await context.db.friendRequests.update(
-        {
-            where: { id: parseInt(args.requestId) },
-            data: { status: "ACCEPTED" }
-        }
+    deleteRequest(parseInt(args.requestId), context)
 
-    )
-    await context.db.users.update(
-        {
-            where: { id: Object.values(userId)[0] },
-            data: {
-                friends: {
-                    connect: { id: requestToAccept.senderId }
-                }
-            }
-        }
-    )
-    await context.db.users.update(
-        {
-            where: { id: requestToAccept.senderId },
-            data: {
-                friends: {
-                    connect: { id: Object.values(userId)[0] }
-                }
-            }
-        }
-    )
+    addFriend(Object.values(userId)[0], requestToAccept.senderId, context)
+    addFriend(requestToAccept.senderId, Object.values(userId)[0], context)
+
     return "Accepted";
 
 }
 
 export const declineRequest: GraphQLResolveFn = async (parent, args, context, info) => {
 
-    await context.db.friendRequests.update(
-        {
-            where: { id: parseInt(args.requestId) },
-            data: { status: "ACCEPTED" }
-        }
-
-    )
+    deleteRequest(parseInt(args.requestId), context)
 }
+

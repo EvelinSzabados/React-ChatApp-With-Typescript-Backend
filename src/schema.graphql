@@ -46,13 +46,6 @@ type FriendRequest{
     id: ID!,
     sender: User!
     reciever: User!
-    status: FriendshipRequestStatus!
-}
-
-enum FriendshipRequestStatus {
-    PENDING
-    ACCEPTED
-    DECLINED
 }
 
 type AuthPayload {
