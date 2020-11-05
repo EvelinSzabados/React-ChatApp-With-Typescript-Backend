@@ -14,7 +14,9 @@ type Mutation{
     newMessage(senderId: ID!, chatId: ID!, text: String!): Message
     signup(email: String!, password: String!, displayName: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-   
+    sendRequest(friendId: ID!): FriendRequest
+    acceptRequest(requestId: ID!): String
+
 }
 
 type Chat{
@@ -44,12 +46,13 @@ type FriendRequest{
     id: ID!,
     sender: User!
     reciever: User!
+    status: FriendshipRequestStatus!
 }
 
 enum FriendshipRequestStatus {
     PENDING
     ACCEPTED
-    REJECTED
+    DECLINED
 }
 
 type AuthPayload {
