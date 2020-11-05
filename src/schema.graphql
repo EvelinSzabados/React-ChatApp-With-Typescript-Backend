@@ -16,6 +16,7 @@ type Mutation{
     login(email: String!, password: String!): AuthPayload
     sendRequest(friendId: ID!): FriendRequest
     acceptRequest(requestId: ID!): String
+    deleteFriend(friendId: ID!): String
 
 }
 
@@ -37,7 +38,7 @@ type User{
     password: String!
     profilePictureUrl: String
     status: Status!
-    friends: [User!]
+    friends: [FriendShip!]
     friendRequestsSent: [FriendRequest!],
     friendRequestsRecieved: [FriendRequest!]
 }
@@ -46,6 +47,11 @@ type FriendRequest{
     id: ID!,
     sender: User!
     reciever: User!
+}
+
+type FriendShip{
+    id: ID!
+    users: [User!]!
 }
 
 type AuthPayload {
