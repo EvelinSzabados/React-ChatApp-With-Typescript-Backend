@@ -2,6 +2,37 @@
   "version": "0.3.14-fixed",
   "steps": [
     {
+      "tag": "CreateEnum",
+      "enum": "statuses",
+      "values": [
+        "OFFLINE",
+        "BUSY",
+        "AVAILABLE"
+      ]
+    },
+    {
+      "tag": "CreateSource",
+      "source": "db"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Source",
+        "source": "db"
+      },
+      "argument": "provider",
+      "value": "\"postgresql\""
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Source",
+        "source": "db"
+      },
+      "argument": "url",
+      "value": "\"***\""
+    },
+    {
       "tag": "CreateModel",
       "model": "chats"
     },
@@ -86,6 +117,31 @@
       "field": "users",
       "type": "users",
       "arity": "List"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "chats",
+          "field": "users"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "chats",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"ChatUsers\""
     },
     {
       "tag": "CreateField",
@@ -256,67 +312,6 @@
     },
     {
       "tag": "CreateModel",
-      "model": "statuses"
-    },
-    {
-      "tag": "CreateField",
-      "model": "statuses",
-      "field": "id",
-      "type": "Int",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "statuses",
-          "field": "id"
-        },
-        "directive": "id"
-      }
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "statuses",
-          "field": "id"
-        },
-        "directive": "default"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "statuses",
-          "field": "id"
-        },
-        "directive": "default"
-      },
-      "argument": "",
-      "value": "autoincrement()"
-    },
-    {
-      "tag": "CreateField",
-      "model": "statuses",
-      "field": "statusName",
-      "type": "String",
-      "arity": "Required"
-    },
-    {
-      "tag": "CreateField",
-      "model": "statuses",
-      "field": "user",
-      "type": "users",
-      "arity": "List"
-    },
-    {
-      "tag": "CreateModel",
       "model": "users"
     },
     {
@@ -416,7 +411,7 @@
           "model": "users",
           "field": "status"
         },
-        "directive": "relation"
+        "directive": "default"
       }
     },
     {
@@ -428,31 +423,17 @@
           "model": "users",
           "field": "status"
         },
-        "directive": "relation"
+        "directive": "default"
       },
-      "argument": "fields",
-      "value": "[statusId]"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "users",
-          "field": "status"
-        },
-        "directive": "relation"
-      },
-      "argument": "references",
-      "value": "[id]"
+      "argument": "value",
+      "value": "OFFLINE"
     },
     {
       "tag": "CreateField",
       "model": "users",
-      "field": "chat",
+      "field": "chats",
       "type": "chats",
-      "arity": "Optional"
+      "arity": "List"
     },
     {
       "tag": "CreateDirective",
@@ -460,7 +441,7 @@
         "path": {
           "tag": "Field",
           "model": "users",
-          "field": "chat"
+          "field": "chats"
         },
         "directive": "relation"
       }
@@ -472,33 +453,12 @@
         "path": {
           "tag": "Field",
           "model": "users",
-          "field": "chat"
+          "field": "chats"
         },
         "directive": "relation"
       },
-      "argument": "fields",
-      "value": "[chatId]"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "users",
-          "field": "chat"
-        },
-        "directive": "relation"
-      },
-      "argument": "references",
-      "value": "[id]"
-    },
-    {
-      "tag": "CreateField",
-      "model": "users",
-      "field": "chatId",
-      "type": "Int",
-      "arity": "Optional"
+      "argument": "name",
+      "value": "\"ChatUsers\""
     },
     {
       "tag": "CreateField",
@@ -510,25 +470,101 @@
     {
       "tag": "CreateField",
       "model": "users",
-      "field": "statusId",
+      "field": "friends",
+      "type": "users",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "friends"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "friends"
+        },
+        "directive": "relation"
+      },
+      "argument": "",
+      "value": "\"usersTousers\""
+    },
+    {
+      "tag": "CreateField",
+      "model": "users",
+      "field": "users",
+      "type": "users",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "users"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "",
+      "value": "\"usersTousers\""
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[usersId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "users",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "users",
+      "field": "usersId",
       "type": "Int",
-      "arity": "Required"
-    },
-    {
-      "tag": "DeleteModel",
-      "model": "chat"
-    },
-    {
-      "tag": "DeleteModel",
-      "model": "message"
-    },
-    {
-      "tag": "DeleteModel",
-      "model": "status"
-    },
-    {
-      "tag": "DeleteModel",
-      "model": "user"
+      "arity": "Optional"
     }
   ]
 }

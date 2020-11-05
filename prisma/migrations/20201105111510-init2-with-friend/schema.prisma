@@ -24,27 +24,17 @@ model messages {
 }
 
 model users {
-    id                Int         @id @default(autoincrement())
+    id                Int        @id @default(autoincrement())
     displayName       String
-    email             String      @unique
+    email             String     @unique
     password          String
     profilePictureUrl String
-    status            statuses    @default(value: OFFLINE)
-    chats             chats[]     @relation(name: "ChatUsers")
+    status            statuses   @default(value: OFFLINE)
+    chats             chats[]    @relation(name: "ChatUsers")
     message           messages[]
-    friendShip        friendShip? @relation(fields: [friendShipId], references: [id])
-    friendShipId      Int?
-}
-
-model friendShip {
-    id      Int     @id @default(autoincrement())
-    friends users[]
-}
-
-enum friendShipRequestStatus {
-    PENDING
-    ACCEPTED
-    REJECTED
+    friends           users[]    @relation("usersTousers")
+    users             users?     @relation("usersTousers", fields: [usersId], references: [id])
+    usersId           Int?
 }
 
 enum statuses {
