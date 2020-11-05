@@ -36,20 +36,14 @@ type User{
     profilePictureUrl: String
     status: Status!
     friends: [User!]
-    friendshipRequestsSent: [FriendshipRequestSent!]!
-    friendshipRequestsReceived: [FriendshipRequestReceived!]!
+    friendRequestsSent: [FriendRequest!],
+    friendRequestsRecieved: [FriendRequest!]
 }
 
-type FriendshipRequestSent {
-    id: ID!
-    to: User!
-    status: FriendshipRequestStatus!
-}
-
-type FriendshipRequestReceived {
-    id: ID!
-    from: User!
-    status: FriendshipRequestStatus!
+type FriendRequest{
+    id: ID!,
+    sender: User!
+    reciever: User!
 }
 
 enum FriendshipRequestStatus {
@@ -63,9 +57,10 @@ type AuthPayload {
   user: User
 }
 
-type Status{
-    id: ID!
-    statusName: String!
+enum Status{
+    OFFLINE
+    BUSY
+    AVAILABLE
 }
 
 
