@@ -19,28 +19,30 @@ export function getUserId(req: any) {
     throw new Error("Not authenticated")
 }
 export const deleteRequest = async (requestId: number, context: Context) => {
-    await context.db.friendRequests.delete(
+    const deletedRequest = await context.db.friendRequests.delete(
         {
             where: { id: requestId }
         }
 
     )
+    return deletedRequest;
 }
 
 export const addFriend = async (userId: number, friendId: number, context: Context) => {
 
-    await context.db.friendships.create({
+    const friend = await context.db.friendships.create({
         data: {
             users: {
                 connect: [{ id: userId }, { id: friendId }]
             }
         }
     })
+    return friend;
 }
 
 export const removeFriend = async (userId: number, friendId: number, context: Context) => {
 
-    await context.db.friendships.deleteMany({
+    const deletedFriend = await context.db.friendships.deleteMany({
         where: {
             AND: [
                 {
@@ -61,6 +63,7 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
                 }]
         }
     })
+    return deletedFriend;
 
 
 }

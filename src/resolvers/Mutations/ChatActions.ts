@@ -1,4 +1,4 @@
-import { getUserId, validateSubscription } from '../../utils';
+import { validateSubscription } from '../../utils';
 import { GraphQLResolveFn } from '../types'
 
 export const newChat: GraphQLResolveFn = async (parent, args, context, info) => {
@@ -24,7 +24,11 @@ export const deleteChat: GraphQLResolveFn = async (parent, args, context, info) 
   await context.db.messages.deleteMany({ where: { chatId: parseInt(args.id) } })
   const deletedChat = await context.db.chats.delete({
     where: { id: parseInt(args.id) },
+    include: {
+      users: true
+    }
   })
-  context.pubsub.publish("DELETE_CHAT", newChat)
+  validateSubscription(context, "DELETE_CHAT", deletedChat.users, deletedChat)
+
   return deletedChat;
 }

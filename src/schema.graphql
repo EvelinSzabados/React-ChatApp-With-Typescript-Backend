@@ -16,8 +16,8 @@ type Mutation{
     signup(email: String!, password: String!, displayName: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
     sendRequest(friendId: ID!): FriendRequest
-    acceptRequest(requestId: ID!): String
-    deleteFriend(friendId: ID!): String
+    acceptRequest(requestId: ID!): User
+    deleteFriend(friendId: ID!): User
 
 }
 
@@ -25,6 +25,10 @@ type Subscription{
     newChat: Chat,
     newMessage: Message
     deleteChat: Chat
+    sendRequest: FriendRequest
+    acceptRequest: User
+    declineRequest: FriendRequest
+    deleteFriend: User
 }
 
 type Chat{
