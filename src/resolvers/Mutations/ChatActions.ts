@@ -2,7 +2,7 @@ import { getUserId } from '../../utils';
 import { GraphQLResolveFn } from '../types'
 
 export const newChat: GraphQLResolveFn = (parent, args, context, info) => {
-  const userId = getUserId(context.request)
+  getUserId(context.request)
   const newChat = context.db.chats.create({
     data: {
       users: {
@@ -11,6 +11,7 @@ export const newChat: GraphQLResolveFn = (parent, args, context, info) => {
       messages: []
     }
   })
+  context.pubsub.publish("NEW_CHAT", newChat)
   return newChat;
 }
 

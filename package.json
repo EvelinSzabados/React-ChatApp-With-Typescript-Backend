@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts",
+    "preinstall": "npx npm-force-resolutions"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/EvelinSzabados/React-ChatApp-With-Typescript-Backend/issues"
+  },
+  "resolutions": {
+    "graphql": "^15.4.0"
   },
   "homepage": "https://github.com/EvelinSzabados/React-ChatApp-With-Typescript-Backend#readme",
   "dependencies": {

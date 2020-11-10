@@ -21,6 +21,10 @@ type Mutation{
 
 }
 
+type Subscription{
+    newChat: Chat
+}
+
 type Chat{
     id: ID!
     lastUpdated: String!

@@ -6,40 +6,24 @@ import User from './resolvers/Queries/User'
 import Query from './resolvers/Queries/Query'
 import Mutation from './resolvers/Mutations/Mutation'
 import { ContextParameters } from 'graphql-yoga/dist/types'
-// import { rule, shield } from 'graphql-shield'
-// import { Context } from 'graphql-yoga/dist/types'
-// import { GraphQLResolveInfo } from 'graphql/type'
+import { PubSub } from 'graphql-yoga'
+import Subscription from './resolvers/Subscriptions/Subscription';
 
+const pubsub = new PubSub()
 const prisma = new PrismaClient()
 
 const resolvers = {
-    Query, Chat, Message, User, Mutation
+    Query, Chat, Message, User, Mutation, Subscription
 }
-
-// const isAuthenticated = rule({ cache: "contextual" })(
-//     async (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
-
-//         return context.userId !== null
-//     }
-// )
-
-// const permissions = shield({
-//     Query: {
-//         chats: isAuthenticated
-//     }
-// });
-
-
-
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
-    // middlewares: [permissions],
     context: async (request: ContextParameters, response: ContextParameters) => ({
         ...request,
         ...response,
         db: prisma,
+        pubsub
     })
 
 })
