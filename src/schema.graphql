@@ -19,6 +19,7 @@ type Mutation{
     sendRequest(friendId: ID!): FriendRequest
     acceptRequest(requestId: ID!): User
     deleteFriend(friendId: ID!): User
+    setStatus(statusName: Status!): User
 
 }
 
