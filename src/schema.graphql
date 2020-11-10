@@ -32,6 +32,7 @@ type Subscription{
     acceptRequest: User
     declineRequest: FriendRequest
     deleteFriend: User
+    setStatus: User
 }
 
 type Chat{

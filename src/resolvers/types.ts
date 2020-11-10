@@ -63,7 +63,7 @@ export type AuthPayload = {
 }
 
 export enum Status {
-    OFFLINE,
-    BUSY,
-    AVAILABLE,
+    OFFLINE = "OFFLINE",
+    BUSY = "BUSY",
+    AVAILABLE = "AVAILABLE",
 }

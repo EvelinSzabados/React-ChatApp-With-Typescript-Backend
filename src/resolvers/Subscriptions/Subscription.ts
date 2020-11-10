@@ -6,6 +6,7 @@ import newRequest from "./SendRequest"
 import acceptRequest from "./AcceptRequest"
 import declineRequest from "./DeclineRequest"
 import deleteFriend from "./DeleteFriend"
+import setStatus from "./SetStatus";
 
 const Subscription: GraphQLSubscriptionResolveFn = {
     newChat: newChat,
@@ -14,7 +15,8 @@ const Subscription: GraphQLSubscriptionResolveFn = {
     sendRequest: newRequest,
     acceptRequest: acceptRequest,
     declineRequest: declineRequest,
-    deleteFriend: deleteFriend
+    deleteFriend: deleteFriend,
+    setStatus: setStatus
 }
 
 export default Subscription;

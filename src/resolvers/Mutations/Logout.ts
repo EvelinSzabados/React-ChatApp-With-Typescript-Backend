@@ -3,7 +3,7 @@ import { getUserId } from '../../utils'
 
 const logout: GraphQLResolveFn = async (parent, args, context, info) => {
     const userId = getUserId(context.request)
-    context.db.users.update({
+    const userStatusUpdated = await context.db.users.update({
         where: {
             id: Object.values(userId)[0]
         },
@@ -11,7 +11,10 @@ const logout: GraphQLResolveFn = async (parent, args, context, info) => {
             status: Status.OFFLINE
         }
     })
+    context.pubsub.publish("SET_STATUS", userStatusUpdated)
+
     context.response.clearCookie("Bearer")
+
     return "Successful logout"
 }
 

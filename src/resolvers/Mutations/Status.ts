@@ -12,6 +12,7 @@ const setStatus: GraphQLResolveFn = async (parent, args, context, info) => {
             status: args.statusName
         }
     })
+    context.pubsub.publish("SET_STATUS", newStatusUser)
     return newStatusUser;
 }
 

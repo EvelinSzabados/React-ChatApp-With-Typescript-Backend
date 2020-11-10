@@ -1,10 +1,10 @@
-import { GraphQLResolveFn } from '../types'
+import { GraphQLResolveFn, Status } from '../types'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { APP_SECRET } from '../../utils'
 
 const login: GraphQLResolveFn = async (parent, args, context, info) => {
-    const user = await context.db.users.findOne({ where: { email: args.email } })
+    let user = await context.db.users.findOne({ where: { email: args.email } })
     if (!user) {
         throw new Error('No such user found')
     }
@@ -22,6 +22,17 @@ const login: GraphQLResolveFn = async (parent, args, context, info) => {
 
     }
     context.response.cookie('Bearer', token, options)
+    await context.db.users.update({
+        where: {
+            id: user.id
+        },
+        data: {
+            status: Status.AVAILABLE
+        }
+    })
+
+    user = await context.db.users.findOne({ where: { email: args.email } })
+    context.pubsub.publish("SET_STATUS", user)
 
     return {
         token,
