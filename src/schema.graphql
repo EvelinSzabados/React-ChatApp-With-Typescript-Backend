@@ -11,7 +11,7 @@ type Query {
 type Mutation{
 
     newChat(users: [ID!]!): Chat
-    deleteChat(id: ID!): String
+    deleteChat(id: ID!): Chat
     newMessage(senderId: ID!, chatId: ID!, text: String!): Message
     signup(email: String!, password: String!, displayName: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
@@ -24,6 +24,7 @@ type Mutation{
 type Subscription{
     newChat: Chat,
     newMessage: Message
+    deleteChat: Chat
 }
 
 type Chat{

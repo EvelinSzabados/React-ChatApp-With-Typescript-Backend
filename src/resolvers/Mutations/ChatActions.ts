@@ -17,9 +17,9 @@ export const newChat: GraphQLResolveFn = (parent, args, context, info) => {
 
 export const deleteChat: GraphQLResolveFn = async (parent, args, context, info) => {
   await context.db.messages.deleteMany({ where: { chatId: parseInt(args.id) } })
-  await context.db.chats.delete({
+  const deletedChat = await context.db.chats.delete({
     where: { id: parseInt(args.id) },
   })
-
-  return "Deleted"
+  context.pubsub.publish("DELETE_CHAT", newChat)
+  return deletedChat;
 }
