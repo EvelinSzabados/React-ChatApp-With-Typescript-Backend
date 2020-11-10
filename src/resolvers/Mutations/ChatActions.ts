@@ -1,19 +1,21 @@
-import { getUserId } from '../../utils';
+import { getUserId, validateSubscription } from '../../utils';
 import { GraphQLResolveFn } from '../types'
 
-export const newChat: GraphQLResolveFn = (parent, args, context, info) => {
-  const userId = getUserId(context.request)
-  const newChat = context.db.chats.create({
+export const newChat: GraphQLResolveFn = async (parent, args, context, info) => {
+
+  const newChat = await context.db.chats.create({
     data: {
       users: {
         connect: [...args.users.map((id: string) => ({ id: parseInt(id) }))]
       },
       messages: []
+    },
+    include: {
+      users: true
     }
   })
-  if (args.users.includes(Object.values(userId)[0].toString())) {
-    context.pubsub.publish("NEW_CHAT", newChat)
-  }
+  validateSubscription(context, "NEW_CHAT", newChat.users, newChat)
+
 
   return newChat;
 }

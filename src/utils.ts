@@ -1,5 +1,6 @@
 import { Context } from 'graphql-yoga/dist/types'
 import { verify } from 'jsonwebtoken'
+import { User } from './resolvers/types'
 
 export const APP_SECRET = 'k-i-n-s-t-a'
 
@@ -62,4 +63,11 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
     })
 
 
+}
+
+export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
+    const userId = getUserId(context.request)
+    if (users.filter((user: User) => user.id === Object.values(userId)[0]).length > 0) {
+        context.pubsub.publish(subName, toPublish)
+    }
 }
