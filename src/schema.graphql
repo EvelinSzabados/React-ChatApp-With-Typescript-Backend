@@ -6,6 +6,7 @@ type Query {
   message(id: ID!): Message
   users: [User!]!
   user(id: ID!): User
+  requests: [FriendRequest!]
 }
 
 type Mutation{

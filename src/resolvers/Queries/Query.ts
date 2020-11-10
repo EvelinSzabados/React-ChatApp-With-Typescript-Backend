@@ -30,6 +30,32 @@ const Query: GraphQLFieldResolveFn = {
     user: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
         return context.db.users.findOne({ where: { id: argsId } })
+    },
+    requests: async (parent, args, context, info) => {
+        const userId = Object.values(getUserId(context.request))[0].toString()
+
+        const result = await context.db.friendRequests.findMany({
+            where: {
+                OR: [
+                    {
+                        sender: {
+                            id: {
+                                equals: parseInt(userId)
+                            }
+                        }
+                    },
+                    {
+                        reciever: {
+                            id: {
+                                equals: parseInt(userId)
+                            }
+
+                        }
+                    }
+                ]
+            }
+        })
+        return result;
     }
 
 }

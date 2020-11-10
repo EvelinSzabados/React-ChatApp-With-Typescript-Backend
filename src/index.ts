@@ -8,12 +8,13 @@ import Mutation from './resolvers/Mutations/Mutation'
 import { ContextParameters } from 'graphql-yoga/dist/types'
 import { PubSub } from 'graphql-yoga'
 import Subscription from './resolvers/Subscriptions/Subscription';
+import FriendRequest from "./resolvers/Queries/Request"
 
 const pubsub = new PubSub()
 const prisma = new PrismaClient()
 
 const resolvers = {
-    Query, Chat, Message, User, Mutation, Subscription
+    Query, Chat, Message, User, FriendRequest, Mutation, Subscription
 }
 
 const server = new GraphQLServer({
