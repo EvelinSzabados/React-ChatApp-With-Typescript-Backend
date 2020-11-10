@@ -22,7 +22,8 @@ type Mutation{
 }
 
 type Subscription{
-    newChat: Chat
+    newChat: Chat,
+    newMessage: Message
 }
 
 type Chat{

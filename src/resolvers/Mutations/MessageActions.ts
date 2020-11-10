@@ -12,6 +12,7 @@ const newMessage: GraphQLResolveFn = async (parent, args, context, info) => {
             text: args.text
         }
     })
+    context.pubsub.publish("NEW_MESSAGE", newMessage)
     return newMessage;
 }
 export default newMessage;
