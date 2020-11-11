@@ -5,7 +5,8 @@ import { User } from './types'
 export const APP_SECRET = 'k-i-n-s-t-a'
 
 export function getUserId(req: any) {
-    const Authorization = req.get('Cookie')
+
+    const Authorization = req.get("Cookie")
 
     if (Authorization) {
         const token = Authorization.replace('Bearer=', '')
@@ -68,7 +69,7 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
 }
 
 export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
-    const userId = getUserId(context.request)
+
     if (users.filter((user: User) => user.id === parseInt(context.userId)).length > 0) {
         context.pubsub.publish(subName, toPublish)
     }

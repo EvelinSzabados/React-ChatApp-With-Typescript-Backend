@@ -22,15 +22,17 @@ const resolvers = {
     Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
 }
 const isAuthenticated = rule({ cache: "contextual" })(
-    async (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+    async (_parent: any, _args: any, context: Context, _info: GraphQLResolveInfo) => {
         return context.userId !== ""
     }
 )
+
 const permissions = shield({
     Mutation: {
         login: allow,
         signup: allow
-    }
+    },
+
 }, {
     debug: true,
     fallbackRule: isAuthenticated
@@ -41,12 +43,13 @@ const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
     middlewares: [permissions],
-    context: async (request: ContextParameters, response: ContextParameters) => ({
+    context: async (request: ContextParameters, response: ContextParameters, connection: ContextParameters) => ({
         ...request,
         ...response,
+        ...connection,
         db: prisma,
         pubsub,
-        userId: Object.values(getUserId(request.request))[0]
+        userId: request.request ? Object.values(getUserId(request.request))[0] : null
     })
 
 })

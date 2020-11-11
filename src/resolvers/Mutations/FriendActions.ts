@@ -4,12 +4,10 @@ import { deleteRequest, addFriend, removeFriend, validateSubscription } from '..
 
 export const sendRequest: GraphQLResolveFn = async (parent, args, context, info) => {
 
-
-
     const request = await context.db.friendRequests.create({
         data: {
             sender: {
-                connect: { id: parseInt(context.userId) },
+                connect: { id: context.userId },
             },
             reciever: {
                 connect: { id: parseInt(args.friendId) },
