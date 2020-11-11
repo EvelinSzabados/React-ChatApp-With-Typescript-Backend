@@ -1,4 +1,4 @@
-import { GraphQLFieldResolveFn } from '../types'
+import { GraphQLFieldResolveFn } from '../../common/types'
 
 const User: GraphQLFieldResolveFn = {
     friendRequestsSent: (parent, args, context, info) => {

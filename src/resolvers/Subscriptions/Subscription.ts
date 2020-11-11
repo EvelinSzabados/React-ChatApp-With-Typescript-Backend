@@ -1,4 +1,4 @@
-import { GraphQLSubscriptionResolveFn } from '../types'
+import { GraphQLSubscriptionResolveFn } from '../../common/types'
 import newChat from "./NewChat";
 import newMessage from "./NewMessage";
 import deleteChat from "./DeleteChat";

@@ -1,5 +1,5 @@
-import { validateSubscription } from '../../utils';
-import { GraphQLResolveFn } from '../types'
+import { validateSubscription } from '../../common/utils';
+import { GraphQLResolveFn } from '../../common/types'
 
 export const newChat: GraphQLResolveFn = async (parent, args, context, info) => {
 

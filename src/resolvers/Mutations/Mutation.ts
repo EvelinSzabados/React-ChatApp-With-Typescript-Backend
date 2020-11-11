@@ -1,6 +1,6 @@
 import { newChat, deleteChat } from './ChatActions'
 import newMessage from './MessageActions'
-import { GraphQLFieldResolveFn } from '../types'
+import { GraphQLFieldResolveFn } from '../../common/types'
 import signup from './SignUp'
 import login from './Login'
 import { sendRequest, acceptRequest, deleteFriend } from './FriendActions'

@@ -1,5 +1,5 @@
-import { GraphQLResolveFn, Status } from '../types'
-import { getUserId } from '../../utils'
+import { GraphQLResolveFn, Status } from '../../common/types'
+import { getUserId } from '../../common/utils'
 
 const logout: GraphQLResolveFn = async (parent, args, context, info) => {
     const userId = getUserId(context.request)

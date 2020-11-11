@@ -1,7 +1,7 @@
-import { GraphQLResolveFn, Status } from '../types'
+import { GraphQLResolveFn, Status } from '../../common/types'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { APP_SECRET } from '../../utils'
+import { APP_SECRET } from '../../common/utils'
 
 const login: GraphQLResolveFn = async (parent, args, context, info) => {
     let user = await context.db.users.findOne({ where: { email: args.email } })

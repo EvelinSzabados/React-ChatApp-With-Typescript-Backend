@@ -1,4 +1,4 @@
-import { GraphQLFieldResolveFn } from '../types'
+import { GraphQLFieldResolveFn } from '../../common/types'
 
 const FriendRequest: GraphQLFieldResolveFn = {
     reciever: (parent, args, context, info) => {

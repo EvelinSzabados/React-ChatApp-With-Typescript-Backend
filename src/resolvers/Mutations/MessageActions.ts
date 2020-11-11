@@ -1,5 +1,5 @@
-import { GraphQLResolveFn, User } from '../types'
-import { getUserId, validateSubscription } from '../../utils';
+import { GraphQLResolveFn, User } from '../../common/types'
+import { getUserId, validateSubscription } from '../../common/utils';
 
 
 const newMessage: GraphQLResolveFn = async (parent, args, context, info) => {

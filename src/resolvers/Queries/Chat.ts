@@ -1,4 +1,4 @@
-import { GraphQLFieldResolveFn } from '../types'
+import { GraphQLFieldResolveFn } from '../../common/types'
 
 const Chat: GraphQLFieldResolveFn = {
     users: (parent, args, context, info) => {

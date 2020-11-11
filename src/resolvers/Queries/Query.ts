@@ -1,22 +1,23 @@
-import { GraphQLFieldResolveFn } from '../types'
-import { getUserId } from '../../utils'
+import { GraphQLFieldResolveFn } from '../../common/types'
+import { getUserId } from '../../common/utils'
 
 
 const Query: GraphQLFieldResolveFn = {
 
     chats: async (parent, args, context, info) => {
-        const userId = getUserId(context.request)
+        // const userId = getUserId(context.request)
 
-        const result = await context.db.chats.findMany({
+        const chatsOfCurrentUser = await context.db.chats.findMany({
             where: {
                 users: {
                     some: {
-                        id: Object.values(userId)[0]
+                        id: Object.values(context.userId)[0]
+                        // id: context.userId
                     }
                 }
             }
         })
-        return result;
+        return chatsOfCurrentUser;
     },
     chat: (parent, args, context, info) => {
         const argsId = parseInt(args.id)
@@ -34,7 +35,7 @@ const Query: GraphQLFieldResolveFn = {
     requests: async (parent, args, context, info) => {
         const userId = Object.values(getUserId(context.request))[0].toString()
 
-        const result = await context.db.friendRequests.findMany({
+        const requestsOfCurrentUser = await context.db.friendRequests.findMany({
             where: {
                 OR: [
                     {
@@ -55,7 +56,7 @@ const Query: GraphQLFieldResolveFn = {
                 ]
             }
         })
-        return result;
+        return requestsOfCurrentUser;
     }
 
 }

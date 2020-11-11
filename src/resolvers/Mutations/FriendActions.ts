@@ -1,5 +1,5 @@
-import { GraphQLResolveFn } from '../types'
-import { getUserId, deleteRequest, addFriend, removeFriend, validateSubscription } from '../../utils'
+import { GraphQLResolveFn } from '../../common/types'
+import { getUserId, deleteRequest, addFriend, removeFriend, validateSubscription } from '../../common/utils'
 
 
 export const sendRequest: GraphQLResolveFn = async (parent, args, context, info) => {

@@ -1,4 +1,4 @@
-import { GraphQLResolveFn } from '../types'
+import { GraphQLResolveFn } from '../../common/types'
 
 const declineRequestSubscribe: GraphQLResolveFn = async (parent, args, context, info) => {
     return context.pubsub.asyncIterator("DECLINE_REQUEST")

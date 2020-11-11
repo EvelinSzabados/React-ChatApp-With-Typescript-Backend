@@ -1,6 +1,6 @@
 import { Context } from 'graphql-yoga/dist/types'
 import { verify } from 'jsonwebtoken'
-import { User } from './resolvers/types'
+import { User } from './types'
 
 export const APP_SECRET = 'k-i-n-s-t-a'
 
@@ -9,14 +9,17 @@ export function getUserId(req: any) {
 
     if (Authorization) {
         const token = Authorization.replace('Bearer=', '')
+        if (token) {
+            const userId = verify(token, APP_SECRET)
 
-        const userId = verify(token, APP_SECRET)
+            return userId;
+        }
 
-        return userId;
 
     }
 
-    throw new Error("Not authenticated")
+    // throw new Error("Not authenticated")
+    return "";
 }
 export const deleteRequest = async (requestId: number, context: Context) => {
     const deletedRequest = await context.db.friendRequests.delete(
