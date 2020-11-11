@@ -13,12 +13,13 @@ import { rule, shield, allow } from 'graphql-shield'
 import { Context } from 'graphql-yoga/dist/types'
 import { GraphQLResolveInfo } from 'graphql/type'
 import { getUserId } from './common/utils'
+import FriendShip from "./resolvers/Queries/Friends"
 
 const pubsub = new PubSub()
 const prisma = new PrismaClient()
 
 const resolvers = {
-    Query, Chat, Message, User, FriendRequest, Mutation, Subscription
+    Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
 }
 const isAuthenticated = rule({ cache: "contextual" })(
     async (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
@@ -45,7 +46,7 @@ const server = new GraphQLServer({
         ...response,
         db: prisma,
         pubsub,
-        userId: getUserId(request.request)
+        userId: Object.values(getUserId(request.request))[0]
     })
 
 })

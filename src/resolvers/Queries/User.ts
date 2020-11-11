@@ -12,5 +12,6 @@ const User: GraphQLFieldResolveFn = {
     },
 
 
+
 }
 export default User;

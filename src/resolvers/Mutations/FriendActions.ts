@@ -1,14 +1,15 @@
 import { GraphQLResolveFn } from '../../common/types'
-import { getUserId, deleteRequest, addFriend, removeFriend, validateSubscription } from '../../common/utils'
+import { deleteRequest, addFriend, removeFriend, validateSubscription } from '../../common/utils'
 
 
 export const sendRequest: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
+
+
 
     const request = await context.db.friendRequests.create({
         data: {
             sender: {
-                connect: { id: Object.values(userId)[0] },
+                connect: { id: parseInt(context.userId) },
             },
             reciever: {
                 connect: { id: parseInt(args.friendId) },
@@ -25,11 +26,11 @@ export const sendRequest: GraphQLResolveFn = async (parent, args, context, info)
 }
 
 export const acceptRequest: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
+
     const requestToAccept = await context.db.friendRequests.findOne({ where: { id: parseInt(args.requestId) } })
     deleteRequest(parseInt(args.requestId), context)
 
-    const newFriend = addFriend(Object.values(userId)[0], requestToAccept.senderId, context)
+    const newFriend = addFriend(parseInt(context.userId), requestToAccept.senderId, context)
     context.pubsub.publish("ACCEPT_REQUEST", newFriend)
     return newFriend;
 
@@ -42,8 +43,8 @@ export const declineRequest: GraphQLResolveFn = async (parent, args, context, in
 }
 
 export const deleteFriend: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
-    const deletedFriend = removeFriend(Object.values(userId)[0], parseInt(args.friendId), context)
+
+    const deletedFriend = removeFriend(parseInt(context.userId), parseInt(args.friendId), context)
     context.pubsub.publish("DELETE_FRIEND", deletedFriend)
 
     return deletedFriend;

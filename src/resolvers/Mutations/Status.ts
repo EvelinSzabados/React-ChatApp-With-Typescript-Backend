@@ -1,12 +1,10 @@
 import { GraphQLResolveFn } from '../../common/types'
-import { getUserId } from '../../common/utils'
 
 const setStatus: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
 
     const newStatusUser = context.db.users.update({
         where: {
-            id: Object.values(userId)[0]
+            id: parseInt(context.userId)
         },
         data: {
             status: args.statusName

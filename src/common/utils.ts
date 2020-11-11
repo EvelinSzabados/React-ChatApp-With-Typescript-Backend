@@ -11,14 +11,10 @@ export function getUserId(req: any) {
         const token = Authorization.replace('Bearer=', '')
         if (token) {
             const userId = verify(token, APP_SECRET)
-
             return userId;
         }
-
-
     }
 
-    // throw new Error("Not authenticated")
     return "";
 }
 export const deleteRequest = async (requestId: number, context: Context) => {
@@ -73,7 +69,7 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
 
 export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
     const userId = getUserId(context.request)
-    if (users.filter((user: User) => user.id === Object.values(userId)[0]).length > 0) {
+    if (users.filter((user: User) => user.id === parseInt(context.userId)).length > 0) {
         context.pubsub.publish(subName, toPublish)
     }
 }
