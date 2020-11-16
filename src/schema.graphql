@@ -6,19 +6,35 @@ type Query {
   message(id: ID!): Message
   users: [User!]!
   user(id: ID!): User
+  requests: [FriendRequest!]
+  
 }
 
 type Mutation{
 
     newChat(users: [ID!]!): Chat
-    deleteChat(id: ID!): String
+    deleteChat(id: ID!): Chat
     newMessage(senderId: ID!, chatId: ID!, text: String!): Message
     signup(email: String!, password: String!, displayName: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
     sendRequest(friendId: ID!): FriendRequest
-    acceptRequest(requestId: ID!): String
-    deleteFriend(friendId: ID!): String
+    acceptRequest(requestId: ID!): FriendShip
+    declineRequest(requestId: ID!): String
+    deleteFriend(friendId: ID!): User
+    setStatus(statusName: Status!): User
+    logout: String
 
+}
+
+type Subscription{
+    newChat: Chat,
+    newMessage: Message
+    deleteChat: Chat
+    sendRequest: FriendRequest
+    acceptRequest: FriendShip
+    declineRequest: FriendRequest
+    deleteFriend: User
+    setStatus: User
 }
 
 type Chat{

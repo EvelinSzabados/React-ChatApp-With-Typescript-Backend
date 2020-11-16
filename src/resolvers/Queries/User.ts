@@ -1,4 +1,4 @@
-import { GraphQLFieldResolveFn } from '../types'
+import { GraphQLFieldResolveFn } from '../../common/types'
 
 const User: GraphQLFieldResolveFn = {
     friendRequestsSent: (parent, args, context, info) => {
@@ -10,6 +10,7 @@ const User: GraphQLFieldResolveFn = {
     friends: (parent, args, context, info) => {
         return context.db.users.findOne({ where: { id: parent.id } }).friends()
     },
+
 
 
 }

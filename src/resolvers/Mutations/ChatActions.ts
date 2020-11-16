@@ -1,24 +1,34 @@
-import { getUserId } from '../../utils';
-import { GraphQLResolveFn } from '../types'
+import { validateSubscription } from '../../common/utils';
+import { GraphQLResolveFn } from '../../common/types'
 
-export const newChat: GraphQLResolveFn = (parent, args, context, info) => {
-  const userId = getUserId(context.request)
-  const newChat = context.db.chats.create({
+export const newChat: GraphQLResolveFn = async (parent, args, context, info) => {
+
+  const newChat = await context.db.chats.create({
     data: {
       users: {
         connect: [...args.users.map((id: string) => ({ id: parseInt(id) }))]
       },
       messages: []
+    },
+    include: {
+      users: true
     }
   })
+  validateSubscription(context, "NEW_CHAT", newChat.users, newChat)
+
+
   return newChat;
 }
 
 export const deleteChat: GraphQLResolveFn = async (parent, args, context, info) => {
   await context.db.messages.deleteMany({ where: { chatId: parseInt(args.id) } })
-  await context.db.chats.delete({
+  const deletedChat = await context.db.chats.delete({
     where: { id: parseInt(args.id) },
+    include: {
+      users: true
+    }
   })
+  validateSubscription(context, "DELETE_CHAT", deletedChat.users, deletedChat)
 
-  return "Deleted"
+  return deletedChat;
 }

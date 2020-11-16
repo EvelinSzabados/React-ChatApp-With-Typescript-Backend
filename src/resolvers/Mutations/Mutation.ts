@@ -1,9 +1,11 @@
 import { newChat, deleteChat } from './ChatActions'
 import newMessage from './MessageActions'
-import { GraphQLFieldResolveFn } from '../types'
+import { GraphQLFieldResolveFn } from '../../common/types'
 import signup from './SignUp'
 import login from './Login'
-import { sendRequest, acceptRequest, deleteFriend } from './FriendActions'
+import { sendRequest, acceptRequest, deleteFriend, declineRequest } from './FriendActions'
+import setStatus from "./Status"
+import logout from "./Logout"
 
 const Mutation: GraphQLFieldResolveFn = {
     newChat: newChat,
@@ -13,7 +15,10 @@ const Mutation: GraphQLFieldResolveFn = {
     login: login,
     sendRequest: sendRequest,
     acceptRequest: acceptRequest,
-    deleteFriend: deleteFriend
+    declineRequest: declineRequest,
+    deleteFriend: deleteFriend,
+    setStatus: setStatus,
+    logout: logout
 
 }
 

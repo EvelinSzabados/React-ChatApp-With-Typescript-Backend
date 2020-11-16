@@ -6,40 +6,50 @@ import User from './resolvers/Queries/User'
 import Query from './resolvers/Queries/Query'
 import Mutation from './resolvers/Mutations/Mutation'
 import { ContextParameters } from 'graphql-yoga/dist/types'
-// import { rule, shield } from 'graphql-shield'
-// import { Context } from 'graphql-yoga/dist/types'
-// import { GraphQLResolveInfo } from 'graphql/type'
+import { PubSub } from 'graphql-yoga'
+import Subscription from './resolvers/Subscriptions/Subscription';
+import FriendRequest from "./resolvers/Queries/Request"
+import { rule, shield, allow } from 'graphql-shield'
+import { Context } from 'graphql-yoga/dist/types'
+import { GraphQLResolveInfo } from 'graphql/type'
+import { getUserId } from './common/utils'
+import FriendShip from "./resolvers/Queries/Friends"
 
+const pubsub = new PubSub()
 const prisma = new PrismaClient()
 
 const resolvers = {
-    Query, Chat, Message, User, Mutation
+    Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
 }
+const isAuthenticated = rule({ cache: "no_cache" })(
+    async (_parent: any, _args: any, context: Context, _info: GraphQLResolveInfo) => {
+        return context.userId !== "Not authenticated"
+    }
+)
 
-// const isAuthenticated = rule({ cache: "contextual" })(
-//     async (parent: any, args: any, context: Context, info: GraphQLResolveInfo) => {
+const permissions = shield({
+    Mutation: {
+        login: allow,
+        signup: allow
+    },
 
-//         return context.userId !== null
-//     }
-// )
-
-// const permissions = shield({
-//     Query: {
-//         chats: isAuthenticated
-//     }
-// });
-
-
+}, {
+    fallbackRule: isAuthenticated
+});
 
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
-    // middlewares: [permissions],
-    context: async (request: ContextParameters, response: ContextParameters) => ({
+    middlewares: [permissions],
+    context: async (request: ContextParameters, response: ContextParameters, connection: ContextParameters) => ({
         ...request,
         ...response,
+        ...connection,
         db: prisma,
+        pubsub,
+        userId: request.request ? await Object.values(getUserId(request.request))[0] : null
+
     })
 
 })

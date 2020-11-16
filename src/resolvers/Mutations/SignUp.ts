@@ -1,7 +1,7 @@
-import { GraphQLResolveFn } from '../types'
+import { GraphQLResolveFn } from '../../common/types'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { APP_SECRET } from '../../utils'
+import { APP_SECRET } from '../../common/utils'
 
 const signup: GraphQLResolveFn = async (parent, args, context, info) => {
     const password = await bcrypt.hash(args.password, 10)

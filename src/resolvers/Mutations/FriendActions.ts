@@ -1,43 +1,51 @@
-import { GraphQLResolveFn } from '../types'
-import { getUserId, deleteRequest, addFriend, removeFriend } from '../../utils'
+import { GraphQLResolveFn } from '../../common/types'
+import { deleteRequest, addFriend, removeFriend, validateSubscription } from '../../common/utils'
 
 
 export const sendRequest: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
 
     const request = await context.db.friendRequests.create({
         data: {
             sender: {
-                connect: { id: Object.values(userId)[0] },
+                connect: { id: context.userId },
             },
             reciever: {
                 connect: { id: parseInt(args.friendId) },
             },
+        },
+        include: {
+            sender: true,
+            reciever: true
         }
     })
+
+    validateSubscription(context, "NEW_REQUEST", new Array(request.sender, request.reciever), request)
     return request;
 }
 
 export const acceptRequest: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
+
     const requestToAccept = await context.db.friendRequests.findOne({ where: { id: parseInt(args.requestId) } })
+
+    const newFriend = addFriend(parseInt(context.userId), requestToAccept.senderId, context)
+    context.pubsub.publish("ACCEPT_REQUEST", newFriend)
     deleteRequest(parseInt(args.requestId), context)
-
-    addFriend(Object.values(userId)[0], requestToAccept.senderId, context)
-
-    return "Accepted";
+    return newFriend;
 
 }
 
 export const declineRequest: GraphQLResolveFn = async (parent, args, context, info) => {
 
-    deleteRequest(parseInt(args.requestId), context)
+    const deletedRequest = deleteRequest(parseInt(args.requestId), context)
+    context.pubsub.publish("DECLINE_REQUEST", deletedRequest)
+    return "Declined"
 }
 
 export const deleteFriend: GraphQLResolveFn = async (parent, args, context, info) => {
-    const userId = getUserId(context.request)
-    removeFriend(Object.values(userId)[0], parseInt(args.friendId), context)
 
-    return "Friend deleted"
+    const deletedFriend = removeFriend(parseInt(context.userId), parseInt(args.friendId), context)
+    context.pubsub.publish("DELETE_FRIEND", deletedFriend)
+
+    return deletedFriend;
 }
 
