@@ -12,6 +12,7 @@ export function getUserId(req: any) {
         const token = Authorization.replace('Bearer=', '')
         if (token) {
             const userId = verify(token, APP_SECRET)
+
             return userId;
         }
     }
