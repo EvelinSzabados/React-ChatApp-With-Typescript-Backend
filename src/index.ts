@@ -21,9 +21,9 @@ const prisma = new PrismaClient()
 const resolvers = {
     Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
 }
-const isAuthenticated = rule({ cache: "contextual" })(
+const isAuthenticated = rule({ cache: "no_cache" })(
     async (_parent: any, _args: any, context: Context, _info: GraphQLResolveInfo) => {
-        return context.userId !== ""
+        return context.userId !== "Not authenticated"
     }
 )
 
@@ -34,7 +34,6 @@ const permissions = shield({
     },
 
 }, {
-    debug: true,
     fallbackRule: isAuthenticated
 });
 
@@ -50,6 +49,7 @@ const server = new GraphQLServer({
         db: prisma,
         pubsub,
         userId: request.request ? Object.values(getUserId(request.request))[0] : null
+
     })
 
 })

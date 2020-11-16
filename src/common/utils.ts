@@ -16,7 +16,7 @@ export function getUserId(req: any) {
         }
     }
 
-    return "";
+    return "Not authenticated";
 }
 export const deleteRequest = async (requestId: number, context: Context) => {
     const deletedRequest = await context.db.friendRequests.delete(
@@ -35,8 +35,12 @@ export const addFriend = async (userId: number, friendId: number, context: Conte
             users: {
                 connect: [{ id: userId }, { id: friendId }]
             }
+        },
+        include: {
+            users: true
         }
     })
+
     return friend;
 }
 

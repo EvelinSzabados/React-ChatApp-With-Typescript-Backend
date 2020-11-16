@@ -3,7 +3,7 @@ import newMessage from './MessageActions'
 import { GraphQLFieldResolveFn } from '../../common/types'
 import signup from './SignUp'
 import login from './Login'
-import { sendRequest, acceptRequest, deleteFriend } from './FriendActions'
+import { sendRequest, acceptRequest, deleteFriend, declineRequest } from './FriendActions'
 import setStatus from "./Status"
 import logout from "./Logout"
 
@@ -15,6 +15,7 @@ const Mutation: GraphQLFieldResolveFn = {
     login: login,
     sendRequest: sendRequest,
     acceptRequest: acceptRequest,
+    declineRequest: declineRequest,
     deleteFriend: deleteFriend,
     setStatus: setStatus,
     logout: logout

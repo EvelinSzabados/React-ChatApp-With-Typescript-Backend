@@ -3,6 +3,7 @@ import { GraphQLFieldResolveFn } from '../../common/types'
 const Query: GraphQLFieldResolveFn = {
 
     chats: async (parent, args, context, info) => {
+
         const chatsOfCurrentUser = await context.db.chats.findMany({
             where: {
                 users: {
