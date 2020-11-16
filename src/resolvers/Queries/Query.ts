@@ -1,4 +1,5 @@
 import { GraphQLFieldResolveFn } from '../../common/types'
+import { getRelevantFriends, requestsOfCurrentUser } from "../../common/utils"
 
 const Query: GraphQLFieldResolveFn = {
 
@@ -29,48 +30,11 @@ const Query: GraphQLFieldResolveFn = {
         return context.db.users.findOne({ where: { id: argsId } })
     },
     requests: async (parent, args, context, info) => {
-        const userId = context.userId
-
-        const requestsOfCurrentUser = await context.db.friendRequests.findMany({
-            where: {
-                OR: [
-                    {
-                        sender: {
-                            id: {
-                                equals: parseInt(userId)
-                            }
-                        }
-                    },
-                    {
-                        reciever: {
-                            id: {
-                                equals: parseInt(userId)
-                            }
-
-                        }
-                    }
-                ]
-            }
-        })
-        return requestsOfCurrentUser;
+        return await requestsOfCurrentUser(context)
     },
     relevantFriends: async (parent, args, context, info) => {
-        let relevantFriends = await context.db.$queryRaw`
-        SELECT 
-        users.id, 
-        users.email, 
-        users."displayName", 
-        users.status, 
-        users."profilePictureUrl" 
-        FROM chats
-        JOIN "_ChatUsers" AS con 
-        ON chats.id = con."A"
-        JOIN "_ChatUsers" AS con2
-        ON con."B" <> con2."B" AND con."A" = con2."A" AND con."B" = ${context.userId}
-        JOIN users ON con2."B" = users.id
-        WHERE users.id <> ${context.userId} 
-        ORDER BY chats."lastUpdated" DESC LIMIT 5;
-        `
+
+        const relevantFriends = await getRelevantFriends(context)
 
         if (relevantFriends.length === 0) {
             return await context.db.$queryRaw`
