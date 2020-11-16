@@ -48,7 +48,7 @@ const server = new GraphQLServer({
         ...connection,
         db: prisma,
         pubsub,
-        userId: request.request ? Object.values(getUserId(request.request))[0] : null
+        userId: request.request ? await Object.values(getUserId(request.request))[0] : null
 
     })
 

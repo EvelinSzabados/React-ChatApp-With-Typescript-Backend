@@ -14,6 +14,11 @@ const newMessage: GraphQLResolveFn = async (parent, args, context, info) => {
             text: args.text
         }
     })
+    await context.db.chats.update({
+        where: { id: parseInt(args.chatId) },
+        data: { lastUpdated: new Date() },
+    })
+
     let chatUsers = await context.db.chats.findOne({ where: { id: parseInt(args.chatId) } }).users()
     validateSubscription(context, "NEW_MESSAGE", chatUsers, newMessage)
 
