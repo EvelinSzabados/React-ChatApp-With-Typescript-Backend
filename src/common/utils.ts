@@ -12,6 +12,7 @@ export function getUserId(req: any) {
         const token = Authorization.replace('Bearer=', '')
         if (token) {
             const userId = verify(token, APP_SECRET)
+
             return userId;
         }
     }
@@ -77,4 +78,47 @@ export const validateSubscription = async (context: Context, subName: string, us
     if (users.filter((user: User) => user.id === parseInt(context.userId)).length > 0) {
         context.pubsub.publish(subName, toPublish)
     }
+}
+
+export const getRelevantFriends = (context: Context) => {
+    let relevantFriends = context.db.$queryRaw`
+        SELECT 
+        users.id, 
+        users.email, 
+        users."displayName", 
+        users.status, 
+        users."profilePictureUrl" 
+        FROM chats
+        JOIN "_ChatUsers" AS con 
+        ON chats.id = con."A"
+        JOIN "_ChatUsers" AS con2
+        ON con."B" <> con2."B" AND con."A" = con2."A" AND con."B" = ${context.userId}
+        JOIN users ON con2."B" = users.id
+        WHERE users.id <> ${context.userId} 
+        ORDER BY chats."lastUpdated" DESC LIMIT 5;`
+    return relevantFriends
+}
+
+export const requestsOfCurrentUser = (context: Context) => {
+    return context.db.friendRequests.findMany({
+        where: {
+            OR: [
+                {
+                    sender: {
+                        id: {
+                            equals: context.userID
+                        }
+                    }
+                },
+                {
+                    reciever: {
+                        id: {
+                            equals: context.userId
+                        }
+
+                    }
+                }
+            ]
+        }
+    })
 }

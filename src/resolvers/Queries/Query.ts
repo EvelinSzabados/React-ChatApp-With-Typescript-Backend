@@ -1,4 +1,5 @@
 import { GraphQLFieldResolveFn } from '../../common/types'
+import { getRelevantFriends, requestsOfCurrentUser } from "../../common/utils"
 
 const Query: GraphQLFieldResolveFn = {
 
@@ -29,30 +30,30 @@ const Query: GraphQLFieldResolveFn = {
         return context.db.users.findOne({ where: { id: argsId } })
     },
     requests: async (parent, args, context, info) => {
-        const userId = context.userId
+        return await requestsOfCurrentUser(context)
+    },
+    relevantFriends: async (parent, args, context, info) => {
 
-        const requestsOfCurrentUser = await context.db.friendRequests.findMany({
-            where: {
-                OR: [
-                    {
-                        sender: {
-                            id: {
-                                equals: parseInt(userId)
-                            }
-                        }
-                    },
-                    {
-                        reciever: {
-                            id: {
-                                equals: parseInt(userId)
-                            }
+        const relevantFriends = await getRelevantFriends(context)
 
-                        }
-                    }
-                ]
-            }
-        })
-        return requestsOfCurrentUser;
+        if (relevantFriends.length === 0) {
+            return await context.db.$queryRaw`
+            SELECT 
+            usr2.email,
+            usr2.id,
+            usr2."displayName",
+            usr2.status 
+            FROM users 
+            RIGHT JOIN "_FriendShip" AS con 
+            ON users.id = con."B" 
+            JOIN "_FriendShip" AS con2 
+            ON con."B" <> con2."B" 
+            AND con."A" = con2."A" 
+            AND con."B"= 2 
+            JOIN users usr2 ON con2."B" = usr2.id LIMIT 5;`
+        }
+
+        return relevantFriends;
     }
 
 }
