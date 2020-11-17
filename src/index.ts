@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { GraphQLServer } from 'graphql-yoga'
 import { PrismaClient } from '@prisma/client'
 import Chat from './resolvers/Queries/Chat'

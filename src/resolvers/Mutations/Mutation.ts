@@ -6,6 +6,7 @@ import login from './Login'
 import { sendRequest, acceptRequest, deleteFriend, declineRequest } from './FriendActions'
 import setStatus from "./Status"
 import logout from "./Logout"
+import { uploadPhoto } from "./UploadPhoto";
 
 const Mutation: GraphQLFieldResolveFn = {
     newChat: newChat,
@@ -18,7 +19,8 @@ const Mutation: GraphQLFieldResolveFn = {
     declineRequest: declineRequest,
     deleteFriend: deleteFriend,
     setStatus: setStatus,
-    logout: logout
+    logout: logout,
+    uploadPhoto: uploadPhoto
 
 }
 

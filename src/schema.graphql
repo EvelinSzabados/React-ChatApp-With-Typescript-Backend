@@ -24,6 +24,7 @@ type Mutation{
     deleteFriend(friendId: ID!): User
     setStatus(statusName: Status!): User
     logout: String
+    uploadPhoto(photo: String!): String
 
 }
 
