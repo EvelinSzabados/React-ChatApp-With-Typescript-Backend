@@ -50,7 +50,7 @@ const Query: GraphQLFieldResolveFn = {
             ON con."B" <> con2."B" 
             AND con."A" = con2."A" 
             AND con."B"= 2 
-            JOIN users usr2 ON con2."B" = usr2.id;`
+            JOIN users usr2 ON con2."B" = usr2.id LIMIT 5;`
         }
 
         return relevantFriends;
