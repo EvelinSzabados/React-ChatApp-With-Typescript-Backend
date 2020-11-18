@@ -1,5 +1,5 @@
 import { GraphQLResolveFn } from '../../common/types'
-var cloudinary = require('cloudinary');
+const cloudinary = require('cloudinary');
 
 export const uploadPhoto: GraphQLResolveFn = async (parent, args, context, info) => {
     cloudinary.config({
@@ -17,7 +17,12 @@ export const uploadPhoto: GraphQLResolveFn = async (parent, args, context, info)
             folder: "profile_pictures",
 
         });
-
+        await context.db.users.update({
+            where: { id: context.userId },
+            data: {
+                profilePictureUrl: result.url
+            }
+        })
         return `Successful-Photo URL: ${result.url}`;
     } catch (e) {
 
