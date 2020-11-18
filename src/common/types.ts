@@ -18,6 +18,7 @@ export type GraphQLResolveFn = (
     context: Context,
     info: GraphQLResolveInfo) => any
 
+
 export type GraphQLSubscriptionFn = {
     subscribe: GraphQLResolveFn,
     resolve: (payload: any) => any
