@@ -19,7 +19,6 @@ const login: GraphQLResolveFn = async (parent, args, context, info) => {
         httpOnly: true,
         domain: "localhost",
 
-
     }
     context.response.cookie('Bearer', token, options)
     await context.db.users.update({

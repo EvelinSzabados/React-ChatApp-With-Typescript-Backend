@@ -6,6 +6,7 @@ type Query {
   message(id: ID!): Message
   users: [User!]!
   user(id: ID!): User
+  currentUser: User!
   requests: [FriendRequest!]
   relevantFriends: [User!]
   

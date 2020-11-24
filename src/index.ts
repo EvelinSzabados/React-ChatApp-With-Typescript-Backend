@@ -22,7 +22,7 @@ const prisma = new PrismaClient()
 const resolvers = {
     Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
 }
-const isAuthenticated = rule({ cache: "no_cache" })(
+const isAuthenticated = rule({ cache: "contextual" })(
     async (_parent: any, _args: any, context: Context, _info: GraphQLResolveInfo) => {
         return context.userId !== "Not authenticated"
     }
@@ -43,16 +43,16 @@ const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
     middlewares: [permissions],
-    context: async (request: ContextParameters, response: ContextParameters, connection: ContextParameters) => ({
+    context: async (request: ContextParameters, response: ContextParameters) => ({
         ...request,
         ...response,
-        ...connection,
         db: prisma,
         pubsub,
-        userId: request.request ? await Object.values(getUserId(request.request))[0] : null
+        userId: request.request ? await Object.values(getUserId(request.request))[0] : null,
+        testVar: request.connection
 
     })
 
 })
 
-server.start({ cors: { credentials: true } }, () => console.log(`Server is running on http://localhost:4000`))
+server.start({ cors: { origin: ["http://localhost:3000"], credentials: true } }, () => console.log(`Server is running on http://localhost:4000`))

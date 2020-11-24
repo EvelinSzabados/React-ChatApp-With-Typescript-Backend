@@ -8,14 +8,16 @@ export function getUserId(req: any) {
 
     const Authorization = req.get("Cookie")
 
+
     if (Authorization) {
         const token = Authorization.replace('Bearer=', '')
+
         if (token) {
             const userId = verify(token, APP_SECRET)
-
             return userId;
         }
     }
+
 
     return "Not authenticated";
 }
@@ -75,9 +77,10 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
 
 export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
 
-    if (users.filter((user: User) => user.id === parseInt(context.userId)).length > 0) {
+    if (users[0].id === context.userId || users[1].id == context.userId) {
         context.pubsub.publish(subName, toPublish)
     }
+
 }
 
 export const getRelevantFriends = (context: Context) => {
