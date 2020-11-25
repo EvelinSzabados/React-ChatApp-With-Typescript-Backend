@@ -8,7 +8,6 @@ export function getUserId(req: any) {
 
     const Authorization = req.get("Cookie")
 
-
     if (Authorization) {
         const token = Authorization.replace('Bearer=', '')
 
@@ -17,8 +16,6 @@ export function getUserId(req: any) {
             return userId;
         }
     }
-
-
     return "Not authenticated";
 }
 export const deleteRequest = async (requestId: number, context: Context) => {
@@ -77,7 +74,7 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
 
 export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
 
-    if (users[0].id === context.userId || users[1].id == context.userId) {
+    if (users.filter((user: User) => user.id === context.subUserId).length === 1) {
         context.pubsub.publish(subName, toPublish)
     }
 

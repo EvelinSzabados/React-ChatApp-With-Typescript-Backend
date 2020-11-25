@@ -15,9 +15,13 @@ import { Context } from 'graphql-yoga/dist/types'
 import { GraphQLResolveInfo } from 'graphql/type'
 import { getUserId } from './common/utils'
 import FriendShip from "./resolvers/Queries/Friends"
+import { ConnectionOptions } from 'tls';
+import { verify } from 'jsonwebtoken';
 
 const pubsub = new PubSub()
 const prisma = new PrismaClient()
+
+let currentUserIDFromSubscription: string | null = null;
 
 const resolvers = {
     Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
@@ -43,16 +47,38 @@ const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
     middlewares: [permissions],
-    context: async (request: ContextParameters, response: ContextParameters) => ({
+    context: async (request: ContextParameters, response: ContextParameters, connection: ContextParameters) => ({
         ...request,
         ...response,
+        ...connection,
         db: prisma,
         pubsub,
         userId: request.request ? await Object.values(getUserId(request.request))[0] : null,
-        testVar: request.connection
+        subUserId: currentUserIDFromSubscription
+
 
     })
 
 })
 
-server.start({ cors: { origin: ["http://localhost:3000"], credentials: true } }, () => console.log(`Server is running on http://localhost:4000`))
+server.start({
+    cors: { origin: ["http://localhost:3000"], credentials: true },
+    subscriptions: {
+        path: "/",
+        onConnect: async (connectionParams: ConnectionOptions, webSocket: any) => {
+            try {
+                const refreshToken = webSocket.upgradeReq.headers.cookie
+                    .split(" ")
+                    .filter((cookie: any) => cookie.includes("Bearer"))[0]
+                    .replace("Bearer=", "");
+
+                const userId = verify(refreshToken, 'k-i-n-s-t-a')
+                server.context.subUserId = Object.values(userId)[0]
+                currentUserIDFromSubscription = Object.values(userId)[0]
+
+            } catch (e) {
+                throw new Error(e.message);
+            }
+        }
+    }
+}, () => console.log(`Server is running on http://localhost:4000`))
