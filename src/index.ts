@@ -67,13 +67,12 @@ server.start({
         path: "/",
         onConnect: async (connectionParams: ConnectionOptions, webSocket: any) => {
             try {
-                const refreshToken = webSocket.upgradeReq.headers.cookie
+                const refreshToken = await webSocket.upgradeReq.headers.cookie
                     .split(" ")
                     .filter((cookie: any) => cookie.includes("Bearer"))[0]
                     .replace("Bearer=", "");
 
                 const userId = verify(refreshToken, 'k-i-n-s-t-a')
-                server.context.subUserId = Object.values(userId)[0]
                 currentUserIDFromSubscription = Object.values(userId)[0]
 
             } catch (e) {

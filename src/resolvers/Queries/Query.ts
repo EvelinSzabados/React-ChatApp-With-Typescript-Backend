@@ -4,7 +4,7 @@ import { getRelevantFriends, requestsOfCurrentUser } from "../../common/utils"
 const Query: GraphQLFieldResolveFn = {
 
     chats: async (parent, args, context, info) => {
-        console.log(context.userId)
+
         const chatsOfCurrentUser = await context.db.chats.findMany({
             where: {
                 users: {
