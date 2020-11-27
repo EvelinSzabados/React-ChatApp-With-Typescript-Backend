@@ -73,8 +73,7 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
 }
 
 export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
-
-    if (users.filter((user: User) => user.id === context.subUserId).length > 0) {
+    if (users.filter((user: User) => user.id === context.userId).length > 0) {
 
         context.pubsub.publish(subName, toPublish)
     }

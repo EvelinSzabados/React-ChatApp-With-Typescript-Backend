@@ -17,11 +17,12 @@ import { getUserId } from './common/utils'
 import FriendShip from "./resolvers/Queries/Friends"
 import { ConnectionOptions } from 'tls';
 import { verify } from 'jsonwebtoken';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 const pubsub = new PubSub()
 const prisma = new PrismaClient()
 
-let currentUserIDFromSubscription: string | null = null;
+let currentUserIDFromSubscription: any = null;
 
 const resolvers = {
     Query, Chat, Message, User, FriendRequest, Mutation, Subscription, FriendShip
@@ -37,26 +38,27 @@ const permissions = shield({
         login: allow,
         signup: allow
     },
-
+    Subscription: {
+        newMessage: allow
+    }
 }, {
     fallbackRule: isAuthenticated
 });
+
+
+
+
 
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
     middlewares: [permissions],
-    context: async (request: ContextParameters, response: ContextParameters, connection: ContextParameters) => ({
-        ...request,
-        ...response,
-        ...connection,
+    context: async ({ request, response, connection }: ContextParameters) => ({
+        response: response,
         db: prisma,
         pubsub,
-        userId: request.request ? await Object.values(getUserId(request.request))[0] : null,
-        subUserId: currentUserIDFromSubscription
-
-
+        userId: request ? await Object.values(getUserId(request))[0] : currentUserIDFromSubscription,
     })
 
 })
@@ -64,20 +66,36 @@ const server = new GraphQLServer({
 server.start({
     cors: { origin: ["http://localhost:3000"], credentials: true },
     subscriptions: {
-        path: "/",
+        path: "/subscriptions",
         onConnect: async (connectionParams: ConnectionOptions, webSocket: any) => {
             try {
-                const refreshToken = await webSocket.upgradeReq.headers.cookie
-                    .split(" ")
-                    .filter((cookie: any) => cookie.includes("Bearer"))[0]
-                    .replace("Bearer=", "");
+                const promise = new Promise(async (resolve, reject) => {
 
-                const userId = verify(refreshToken, 'k-i-n-s-t-a')
-                currentUserIDFromSubscription = Object.values(userId)[0]
+                    const refreshToken = await webSocket.upgradeReq.headers.cookie
+                        .split(" ")
+                        .filter((cookie: any) => cookie.includes("Bearer"))[0]
+                        .replace("Bearer=", "");
+                    const userId = verify(refreshToken, 'k-i-n-s-t-a')
 
-            } catch (e) {
-                throw new Error(e.message);
+                    if (userId !== "Not authenticated") {
+                        resolve(Object.values(userId)[0]);
+                    } else {
+                        reject('Not authenticated');
+                    }
+                    return { userId: userId }
+                });
+
+                const user = await promise;
+                currentUserIDFromSubscription = user;
+
+            } catch (error) {
+                console.log(error)
             }
+
+        },
+        onDisconnect: async (connectionParams: ConnectionOptions, webSocket: any) => {
+            currentUserIDFromSubscription = null;
         }
+
     }
 }, () => console.log(`Server is running on http://localhost:4000`))
