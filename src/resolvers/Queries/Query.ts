@@ -12,7 +12,8 @@ const Query: GraphQLFieldResolveFn = {
                         id: context.userId
                     }
                 }
-            }
+            },
+            orderBy: { lastUpdated: 'desc' }
         })
         return chatsOfCurrentUser;
     },

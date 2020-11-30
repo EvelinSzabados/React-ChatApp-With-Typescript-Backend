@@ -82,7 +82,9 @@ server.start({
                     } else {
                         reject('Not authenticated');
                     }
-                    return { userId: userId }
+                    return userId
+
+
                 });
 
                 const user = await promise;

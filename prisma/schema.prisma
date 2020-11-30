@@ -15,12 +15,13 @@ model chats {
 }
 
 model messages {
-    id       Int    @id @default(autoincrement())
-    sender   users  @relation(fields: [senderId], references: [id])
+    id       Int      @id @default(autoincrement())
+    sender   users    @relation(fields: [senderId], references: [id])
     senderId Int
     text     String
-    chat     chats? @relation(fields: [chatId], references: [id])
+    chat     chats?   @relation(fields: [chatId], references: [id])
     chatId   Int?
+    sent     DateTime @default(now())
 }
 
 model users {

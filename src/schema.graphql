@@ -51,6 +51,7 @@ type Message{
     sender: User!
     text: String!
     chat: Chat!
+    sent: String!
 }
 type User{
     id: ID!

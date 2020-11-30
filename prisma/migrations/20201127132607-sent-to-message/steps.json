@@ -3,15 +3,6 @@
   "steps": [
     {
       "tag": "CreateEnum",
-      "enum": "requestStatuses",
-      "values": [
-        "PENDING",
-        "ACCEPTED",
-        "DECLINED"
-      ]
-    },
-    {
-      "tag": "CreateEnum",
       "enum": "statuses",
       "values": [
         "OFFLINE",
@@ -320,6 +311,38 @@
       "arity": "Optional"
     },
     {
+      "tag": "CreateField",
+      "model": "messages",
+      "field": "sent",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "messages",
+          "field": "sent"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "messages",
+          "field": "sent"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
       "tag": "CreateModel",
       "model": "users"
     },
@@ -480,7 +503,7 @@
       "tag": "CreateField",
       "model": "users",
       "field": "friends",
-      "type": "users",
+      "type": "friendships",
       "arity": "List"
     },
     {
@@ -506,74 +529,7 @@
         "directive": "relation"
       },
       "argument": "",
-      "value": "\"usersTousers\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "users",
-      "field": "users",
-      "type": "users",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateDirective",
-      "location": {
-        "path": {
-          "tag": "Field",
-          "model": "users",
-          "field": "users"
-        },
-        "directive": "relation"
-      }
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "users",
-          "field": "users"
-        },
-        "directive": "relation"
-      },
-      "argument": "",
-      "value": "\"usersTousers\""
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "users",
-          "field": "users"
-        },
-        "directive": "relation"
-      },
-      "argument": "fields",
-      "value": "[usersId]"
-    },
-    {
-      "tag": "CreateArgument",
-      "location": {
-        "tag": "Directive",
-        "path": {
-          "tag": "Field",
-          "model": "users",
-          "field": "users"
-        },
-        "directive": "relation"
-      },
-      "argument": "references",
-      "value": "[id]"
-    },
-    {
-      "tag": "CreateField",
-      "model": "users",
-      "field": "usersId",
-      "type": "Int",
-      "arity": "Optional"
+      "value": "\"FriendShip\""
     },
     {
       "tag": "CreateField",
@@ -821,10 +777,14 @@
       "arity": "Required"
     },
     {
+      "tag": "CreateModel",
+      "model": "friendships"
+    },
+    {
       "tag": "CreateField",
-      "model": "friendRequests",
-      "field": "status",
-      "type": "requestStatuses",
+      "model": "friendships",
+      "field": "id",
+      "type": "Int",
       "arity": "Required"
     },
     {
@@ -832,8 +792,19 @@
       "location": {
         "path": {
           "tag": "Field",
-          "model": "friendRequests",
-          "field": "status"
+          "model": "friendships",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "friendships",
+          "field": "id"
         },
         "directive": "default"
       }
@@ -844,13 +815,80 @@
         "tag": "Directive",
         "path": {
           "tag": "Field",
-          "model": "friendRequests",
-          "field": "status"
+          "model": "friendships",
+          "field": "id"
         },
         "directive": "default"
       },
-      "argument": "value",
-      "value": "PENDING"
+      "argument": "",
+      "value": "autoincrement()"
+    },
+    {
+      "tag": "CreateField",
+      "model": "friendships",
+      "field": "userId",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "friendships",
+      "field": "users",
+      "type": "users",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "friendships",
+          "field": "users"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendships",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "name",
+      "value": "\"FriendShip\""
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendships",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[userId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "friendships",
+          "field": "users"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
     }
   ]
 }
