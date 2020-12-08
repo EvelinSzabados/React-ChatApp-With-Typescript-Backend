@@ -46,10 +46,6 @@ const permissions = shield({
 });
 
 
-
-
-
-
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
@@ -69,29 +65,34 @@ server.start({
         path: "/subscriptions",
         onConnect: async (connectionParams: ConnectionOptions, webSocket: any) => {
             try {
-                const promise = new Promise(async (resolve, reject) => {
+                if (connectionParams && webSocket.upgradeReq.headers.cookie) {
 
-                    const refreshToken = await webSocket.upgradeReq.headers.cookie
-                        .split(" ")
-                        .filter((cookie: any) => cookie.includes("Bearer"))[0]
-                        .replace("Bearer=", "");
-                    const userId = verify(refreshToken, 'k-i-n-s-t-a')
+                    const promise = new Promise(async (resolve, reject) => {
 
-                    if (userId !== "Not authenticated") {
-                        resolve(Object.values(userId)[0]);
-                    } else {
-                        reject('Not authenticated');
-                    }
-                    return userId
+                        const refreshToken = await webSocket.upgradeReq.headers.cookie
+                            .split(" ")
+                            .filter((cookie: any) => cookie.includes("Bearer"))[0]
+                            .replace("Bearer=", "");
+                        const userId = verify(refreshToken, 'k-i-n-s-t-a')
+
+                        if (userId !== "Not authenticated") {
+                            resolve(Object.values(userId)[0]);
+                        } else {
+                            reject('Not authenticated');
+                        }
+
+                        return userId
 
 
-                });
+                    });
 
-                const user = await promise;
-                currentUserIDFromSubscription = user;
+                    const user = await promise;
+                    currentUserIDFromSubscription = user;
 
+                }
             } catch (error) {
                 console.log(error)
+
             }
 
         },

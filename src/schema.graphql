@@ -21,7 +21,7 @@ type Mutation{
     login(email: String!, password: String!): AuthPayload
     sendRequest(friendId: ID!): FriendRequest
     acceptRequest(requestId: ID!): FriendShip
-    declineRequest(requestId: ID!): String
+    declineRequest(requestId: ID!): FriendRequest
     deleteFriend(friendId: ID!): User
     setStatus(statusName: Status!): User
     logout: String

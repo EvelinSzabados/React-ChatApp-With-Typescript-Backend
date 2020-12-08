@@ -36,9 +36,9 @@ export const acceptRequest: GraphQLResolveFn = async (parent, args, context, inf
 
 export const declineRequest: GraphQLResolveFn = async (parent, args, context, info) => {
 
-    const deletedRequest = deleteRequest(parseInt(args.requestId), context)
-    context.pubsub.publish("DECLINE_REQUEST", deletedRequest)
-    return "Declined"
+    const deletedRequest = await deleteRequest(parseInt(args.requestId), context)
+    validateSubscription(context, "DECLINE_REQUEST", new Array(deletedRequest.sender, deletedRequest.reciever), deletedRequest)
+    return deletedRequest;
 }
 
 export const deleteFriend: GraphQLResolveFn = async (parent, args, context, info) => {

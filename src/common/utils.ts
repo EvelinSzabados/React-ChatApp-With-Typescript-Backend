@@ -21,11 +21,16 @@ export function getUserId(req: any) {
 export const deleteRequest = async (requestId: number, context: Context) => {
     const deletedRequest = await context.db.friendRequests.delete(
         {
-            where: { id: requestId }
+            where: { id: requestId },
+            include: {
+                reciever: true,
+                sender: true
+            }
         }
 
     )
     return deletedRequest;
+
 }
 
 export const addFriend = async (userId: number, friendId: number, context: Context) => {
@@ -73,10 +78,11 @@ export const removeFriend = async (userId: number, friendId: number, context: Co
 }
 
 export const validateSubscription = async (context: Context, subName: string, users: User[], toPublish: any) => {
-    if (users.filter((user: User) => user.id === context.userId).length > 0) {
 
+    if (users.filter((user: User) => user.id === context.userId).length > 0) {
         context.pubsub.publish(subName, toPublish)
     }
+
 
 }
 
@@ -106,7 +112,7 @@ export const requestsOfCurrentUser = (context: Context) => {
                 {
                     sender: {
                         id: {
-                            equals: context.userID
+                            equals: context.userId
                         }
                     }
                 },
